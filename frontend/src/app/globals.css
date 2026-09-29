@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Dark backgrounds */
+  --color-bg-primary: #080d0a;
+  --color-bg-secondary: #0e1610;
+  --color-bg-card: #131c16;
+  --color-bg-card-hover: #1a261e;
+  --color-border: #243028;
+
+  /* Text */
+  --color-text-primary: #e2efe6;
+  --color-text-secondary: #8fac96;
+  --color-text-muted: #5a7560;
+
+  /* Pakistan green palette */
+  --color-pak-green: #00a651;
+  --color-pak-green-dim: #00a65125;
+  --color-pak-dark: #01411c;
+  --color-pak-dark-dim: #01411c40;
+  --color-pak-light: #39c778;
+
+  /* Accent colors */
+  --color-accent-red: #ef4444;
+  --color-accent-red-dim: #ef444420;
+  --color-accent-orange: #f59e0b;
+  --color-accent-orange-dim: #f59e0b20;
+  --color-accent-yellow: #eab308;
+  --color-accent-yellow-dim: #eab30820;
+  --color-accent-blue: #3b82f6;
+  --color-accent-blue-dim: #3b82f620;
+  --color-accent-purple: #a78bfa;
+
+  /* Severity */
+  --color-severity-humiliating: #ef4444;
+  --color-severity-painful: #f59e0b;
+  --color-severity-embarrassing: #eab308;
+  --color-severity-expected: #8fac96;
+
+  /* Alert levels */
+  --color-alert-meltdown: #ef4444;
+  --color-alert-collapse: #f59e0b;
+  --color-alert-choking: #eab308;
+  --color-alert-nervous: #3b82f6;
+  --color-alert-stable: #00a651;
+
+  /* Status badges */
+  --color-status-live: #ef4444;
+  --color-status-completed: #8fac96;
+  --color-status-upcoming: #3b82f6;
+
+  /* Fraud ratings */
+  --color-fraud-certified: #ef4444;
+  --color-fraud-suspect: #f59e0b;
+  --color-fraud-under: #eab308;
+  --color-fraud-inconsistent: #3b82f6;
+  --color-fraud-redeemable: #00a651;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar — green-tinted */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Pulse for live badges */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-live {
+  animation: pulse-live 1.5s ease-in-out infinite;
+}
+
+/* Green glow for Pakistan branding */
+@keyframes glow-green {
+  0%, 100% { box-shadow: 0 0 4px rgba(0, 166, 81, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(0, 166, 81, 0.5); }
+}
+.glow-green {
+  animation: glow-green 2.5s ease-in-out infinite;
+}
+
+/* Red glow for hate watch / alerts */
+@keyframes glow-red {
+  0%, 100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.5); }
+}
+.glow-red {
+  animation: glow-red 2s ease-in-out infinite;
+}
