@@ -1,277 +1,271 @@
 """
 Pakistan Loss Probability Engine
 ================================
-Two modes:
-1. PRE-MATCH: Computes loss probability for upcoming matches using
-   weighted factors (venue, opponent strength, historical record, chaos factor)
+PRE-MATCH MODE (new):
+  Calculates probability of Pakistan losing an upcoming match using:
+  1. Head-to-Head record vs opponent (20%)
+  2. Opponent ICC ranking (25%)
+  3. Pakistan's recent form (25%)
+  4. Venue/conditions factor (15%)
+  5. Pakistan Chaos Multiplier (15%) — because PCB drama is a real factor
 
-2. LIVE MATCH: Real-time loss probability using current match state —
-   overs remaining, wickets fallen, run rate vs required rate,
-   Pakistan-specific collapse history, and Bayesian updating.
+  Output is EXAGGERATED slightly — this is a hate watch, not ESPN.
 
-The key insight: Pakistan aren't just any team. Their probability distributions
-are FAT-TAILED — they have a much higher chance of extreme outcomes (collapses,
-dramatic chokes) than a normal team. Our model accounts for this.
+LIVE MATCH MODE:
+  Real-time loss probability using current match state.
 """
 
 import numpy as np
 from typing import Optional
 
 
-# --- Pakistan-specific constants derived from historical data ---
+# ============================================
+# HEAD-TO-HEAD DATA (since 2022, all formats combined)
+# Pakistan's record vs each team
+# ============================================
 
-# How often Pakistan collapse (lose 5+ wickets for <50 runs) by format
-COLLAPSE_BASE_RATES = {
-    "ODI": 0.18,   # ~18% of ODI innings feature a collapse
-    "T20I": 0.22,  # Higher in T20s — less time to recover
-    "Test": 0.15,  # Test collapses happen but less frequently
+HEAD_TO_HEAD = {
+    "india":         {"played": 12, "pak_wins": 1,  "pak_losses": 10, "draws": 1},
+    "australia":     {"played": 15, "pak_wins": 4,  "pak_losses": 10, "draws": 1},
+    "england":       {"played": 18, "pak_wins": 6,  "pak_losses": 11, "draws": 1},
+    "south africa":  {"played": 8,  "pak_wins": 2,  "pak_losses": 6,  "draws": 0},
+    "new zealand":   {"played": 14, "pak_wins": 6,  "pak_losses": 7,  "draws": 1},
+    "sri lanka":     {"played": 10, "pak_wins": 6,  "pak_losses": 4,  "draws": 0},
+    "west indies":   {"played": 8,  "pak_wins": 5,  "pak_losses": 3,  "draws": 0},
+    "bangladesh":    {"played": 8,  "pak_wins": 5,  "pak_losses": 3,  "draws": 0},
+    "afghanistan":   {"played": 5,  "pak_wins": 3,  "pak_losses": 2,  "draws": 0},
+    "zimbabwe":      {"played": 6,  "pak_wins": 5,  "pak_losses": 1,  "draws": 0},
+    "ireland":       {"played": 4,  "pak_wins": 2,  "pak_losses": 2,  "draws": 0},
+    "usa":           {"played": 1,  "pak_wins": 0,  "pak_losses": 1,  "draws": 0},
+    "netherlands":   {"played": 2,  "pak_wins": 1,  "pak_losses": 1,  "draws": 0},
+    "nepal":         {"played": 1,  "pak_wins": 1,  "pak_losses": 0,  "draws": 0},
+    "hong kong":     {"played": 2,  "pak_wins": 2,  "pak_losses": 0,  "draws": 0},
+    "namibia":       {"played": 2,  "pak_wins": 2,  "pak_losses": 0,  "draws": 0},
+    "scotland":      {"played": 1,  "pak_wins": 1,  "pak_losses": 0,  "draws": 0},
 }
 
-# Pakistan's historical win rates by format (used as priors)
-HISTORICAL_WIN_RATES = {
-    "ODI": 0.527,
-    "T20I": 0.575,
-    "Test": 0.323,
+# Approximate ICC T20I/ODI combined rankings (lower = better)
+ICC_RANKINGS = {
+    "india": 1, "australia": 2, "england": 3, "south africa": 4,
+    "new zealand": 5, "west indies": 6, "sri lanka": 7, "pakistan": 8,
+    "bangladesh": 9, "afghanistan": 10, "ireland": 11, "zimbabwe": 12,
+    "netherlands": 13, "nepal": 14, "usa": 15, "namibia": 16,
+    "scotland": 17, "hong kong": 18, "oman": 19, "uae": 20,
 }
 
-# Choke factor — multiplier for pressure situations
-# (knockout games, chases over 250, must-win matches)
-CHOKE_MULTIPLIER = 1.35  # Pakistan are 35% more likely to lose under pressure
+# Pakistan recent form: last ~10 completed international matches
+# True = win, False = loss
+PAKISTAN_RECENT_FORM = [
+    False,  # vs England, 3rd Test (lost by 8 wkts)
+    False,  # vs England, 2nd Test (lost by 194 runs)
+    False,  # vs England, 1st Test (lost by innings and 103 runs)
+    True,   # vs County XI (warm-up win)
+    False,  # vs India, T20 WC 2026 (114 all out, lost by 61 runs)
+    True,   # vs Namibia, T20 WC 2026 (won by 102 runs)
+    True,   # vs Hong Kong, T20 WC 2026 (abandoned but qualified)
+    False,  # vs Sri Lanka, T20 WC 2026 Super 8 (lost)
+    False,  # vs New Zealand, ODI (174 all out, lost by 6 wkts)
+    False,  # vs New Zealand, T20I (131/9, lost by 7 wkts)
+]
 
-# Average run rate decline when Pakistan are under pressure
-PRESSURE_RR_DECLINE = 0.82  # run rate drops to 82% of normal
 
-
-def compute_prematch_loss_probability(
-    factors: list[dict],
-    match_format: str,
-    is_icc_event: bool = False,
-    is_knockout: bool = False,
-) -> dict:
+def compute_prematch_loss_probability(opponent: str, match_format: str = "ODI", venue: str = "", is_home: bool = False) -> dict:
     """
-    Compute pre-match loss probability from weighted factors.
+    Compute pre-match loss probability for an upcoming Pakistan match.
 
-    Each factor has an 'impact' score from -100 to +100.
-    Negative = bad for Pakistan, Positive = good for Pakistan.
+    Uses:
+    - H2H record vs this opponent (20%)
+    - Opponent ICC ranking (25%)
+    - Pakistan recent form (25%)
+    - Venue/conditions (15%)
+    - Pakistan Chaos Multiplier™ (15%)
 
-    Returns full probability breakdown with confidence interval.
+    Returns an exaggerated loss probability because this is a hate watch.
     """
-    # Start with historical base loss rate for the format
-    base_loss_rate = 1 - HISTORICAL_WIN_RATES.get(match_format, 0.5)
+    opp_lower = opponent.lower().strip()
 
-    # Sum up factor impacts — each factor shifts the probability
-    total_impact = sum(f["impact"] for f in factors)
+    # --- 1. Head-to-Head (20%) ---
+    h2h = HEAD_TO_HEAD.get(opp_lower, {"played": 0, "pak_wins": 0, "pak_losses": 0, "draws": 0})
+    if h2h["played"] > 0:
+        h2h_loss_rate = h2h["pak_losses"] / h2h["played"]
+    else:
+        h2h_loss_rate = 0.5  # Unknown opponent, coin flip
 
-    # Normalize impact to a probability shift (-1 to 1 range)
-    # Using sigmoid-like transformation for smooth boundaries
-    impact_shift = np.tanh(total_impact / 100)
+    h2h_detail = f"{h2h['pak_losses']}L in {h2h['played']} matches since 2022"
 
-    # Apply impact to base rate
-    # Negative impact increases loss probability, positive decreases it
-    adjusted_loss_prob = base_loss_rate - (impact_shift * 0.3)
+    # --- 2. Opponent ICC Ranking (25%) ---
+    opp_rank = ICC_RANKINGS.get(opp_lower, 15)
+    pak_rank = ICC_RANKINGS.get("pakistan", 8)
 
-    # ICC event penalty — Pakistan historically underperform
-    if is_icc_event:
-        adjusted_loss_prob *= 1.15
+    # If opponent is ranked higher (lower number), Pakistan more likely to lose
+    # If opponent is ranked below 12, Pakistan should win
+    if opp_rank <= 3:
+        ranking_loss_factor = 0.75  # Top 3 = Pakistan loses ~75%
+    elif opp_rank <= 6:
+        ranking_loss_factor = 0.60
+    elif opp_rank <= 8:
+        ranking_loss_factor = 0.50  # Similar level
+    elif opp_rank <= 12:
+        ranking_loss_factor = 0.35
+    else:
+        ranking_loss_factor = 0.20  # Ranked below 12, Pakistan SHOULD win
+        # But this is Pakistan — upset potential is always there
+        ranking_loss_factor += 0.10  # Even against minnows, 30% chance of embarrassment
 
-    # Knockout game choke factor
-    if is_knockout:
-        adjusted_loss_prob *= CHOKE_MULTIPLIER
+    ranking_detail = f"Opponent ranked #{opp_rank}, Pakistan #{pak_rank}"
 
-    # Clamp to valid probability range
-    loss_prob = float(np.clip(adjusted_loss_prob, 0.05, 0.95))
-    win_prob = 1 - loss_prob
+    # --- 3. Pakistan Recent Form (25%) ---
+    wins = sum(1 for r in PAKISTAN_RECENT_FORM if r)
+    losses = sum(1 for r in PAKISTAN_RECENT_FORM if not r)
+    form_loss_rate = losses / max(len(PAKISTAN_RECENT_FORM), 1)
 
-    # For Tests, allocate some probability to draw
-    draw_prob = 0.0
-    if match_format == "Test":
-        draw_prob = 0.15  # ~15% base draw chance
-        loss_prob = loss_prob * (1 - draw_prob)
-        win_prob = win_prob * (1 - draw_prob)
+    form_detail = f"{losses}L, {wins}W in last {len(PAKISTAN_RECENT_FORM)} matches"
 
-    # Determine if this is a hate watch (>60% loss probability)
-    is_hate_watch = loss_prob > 0.60
+    # --- 4. Venue Factor (15%) ---
+    if is_home:
+        venue_factor = 0.40  # Home advantage, but England 3-0'd them at home so...
+    elif "australia" in venue.lower() or "england" in venue.lower() or "south africa" in venue.lower():
+        venue_factor = 0.70  # SENA countries = Pakistan's graveyard
+    elif "uae" in venue.lower() or "dubai" in venue.lower():
+        venue_factor = 0.40  # UAE is practically home
+    else:
+        venue_factor = 0.55  # Neutral/away
 
-    # Compute confidence interval using beta distribution
-    # More extreme factors = wider confidence interval
-    factor_variance = np.var([f["impact"] for f in factors]) if factors else 0
-    confidence_width = 0.05 + (factor_variance / 10000) * 0.15
+    venue_detail = "Home" if is_home else f"At {venue}" if venue else "Venue TBD"
+
+    # --- 5. Pakistan Chaos Multiplier™ (15%) ---
+    # Selection drama, coaching changes, board politics, senior player egos
+    chaos_factor = 0.65  # Base chaos level (always high for Pakistan)
+
+    chaos_detail = "PCB politics, coaching carousel, selection drama"
+
+    # --- Weighted calculation ---
+    raw_prob = (
+        h2h_loss_rate * 0.20 +
+        ranking_loss_factor * 0.25 +
+        form_loss_rate * 0.25 +
+        venue_factor * 0.15 +
+        chaos_factor * 0.15
+    )
+
+    # --- EXAGGERATION for hate watch ---
+    # Bump it up 8-15% because this is Pakistan and they always find new ways to lose
+    exaggeration = 0.08 + np.random.uniform(0, 0.07)
+    exaggerated_prob = min(0.95, raw_prob + exaggeration)
+
+    loss_pct = round(exaggerated_prob * 100, 1)
+
+    # Generate a roast based on the probability
+    if loss_pct >= 80:
+        verdict = "💀 Might as well forfeit"
+    elif loss_pct >= 70:
+        verdict = "🪦 Start writing the post-match excuses"
+    elif loss_pct >= 60:
+        verdict = "😰 Classic Pakistan choking territory"
+    elif loss_pct >= 50:
+        verdict = "🎲 Coin flip, but Pakistan finds ways to lose coin flips too"
+    elif loss_pct >= 40:
+        verdict = "🤞 There's hope... which makes the inevitable loss even more painful"
+    else:
+        verdict = "😴 They should win this. Key word: SHOULD."
 
     return {
-        "loss_probability": round(loss_prob * 100, 1),
-        "win_probability": round(win_prob * 100, 1),
-        "draw_probability": round(draw_prob * 100, 1),
-        "is_hate_watch": is_hate_watch,
-        "confidence_interval": {
-            "low": round(max(0, (loss_prob - confidence_width)) * 100, 1),
-            "high": round(min(1, (loss_prob + confidence_width)) * 100, 1),
+        "loss_probability": loss_pct,
+        "win_probability": round(100 - loss_pct, 1),
+        "verdict": verdict,
+        "breakdown": {
+            "h2h": {"weight": "20%", "value": round(h2h_loss_rate * 100, 1), "detail": h2h_detail, "record": h2h},
+            "ranking": {"weight": "25%", "value": round(ranking_loss_factor * 100, 1), "detail": ranking_detail, "opp_rank": opp_rank, "pak_rank": pak_rank},
+            "form": {"weight": "25%", "value": round(form_loss_rate * 100, 1), "detail": form_detail, "recent": PAKISTAN_RECENT_FORM},
+            "venue": {"weight": "15%", "value": round(venue_factor * 100, 1), "detail": venue_detail},
+            "chaos": {"weight": "15%", "value": round(chaos_factor * 100, 1), "detail": chaos_detail},
         },
-        "factors_summary": {
-            "positive_factors": [f for f in factors if f["impact"] > 0],
-            "negative_factors": [f for f in factors if f["impact"] < 0],
-            "net_impact": total_impact,
-        },
+        "exaggeration_note": "Probabilities are slightly inflated because... well... it's Pakistan",
     }
 
 
+# ============================================
+# LIVE MATCH MODE (kept from before)
+# ============================================
+
+COLLAPSE_BASE_RATES = {"ODI": 0.18, "T20I": 0.22, "Test": 0.15}
+CHOKE_MULTIPLIER = 1.35
+PRESSURE_RR_DECLINE = 0.82
+
+
 def compute_live_loss_probability(
-    match_format: str,
-    innings: int,
-    overs: float,
-    runs: int,
-    wickets: int,
-    target: Optional[int] = None,
-    total_overs: Optional[float] = None,
-    batting_first: bool = True,
-    opponent: str = "Unknown",
-    partnership_balls: int = 0,
-    last_six_overs_runs: Optional[list[int]] = None,
+    match_format: str, innings: int, overs: float, runs: int, wickets: int,
+    target: Optional[int] = None, total_overs: Optional[float] = None,
+    batting_first: bool = True, opponent: str = "Unknown",
+    partnership_balls: int = 0, last_six_overs_runs: Optional[list[int]] = None,
 ) -> dict:
-    """
-    Real-time loss probability calculator.
-
-    Uses current match state + Pakistan-specific historical patterns
-    to compute the probability of Pakistan losing from this exact point.
-
-    The model combines:
-    1. Resource-based projection (Duckworth-Lewis inspired)
-    2. Pakistan-specific collapse probability
-    3. Momentum analysis (recent scoring patterns)
-    4. Historical match comparisons
-    """
+    """Real-time loss probability from current match state."""
     if total_overs is None:
-        total_overs = {"ODI": 50.0, "T20I": 20.0, "Test": 90.0}[match_format]
+        total_overs = {"ODI": 50.0, "T20I": 20.0, "Test": 90.0}.get(match_format, 50.0)
 
     overs_remaining = max(0.1, total_overs - overs)
-    balls_remaining = int(overs_remaining * 6)
     wickets_remaining = 10 - wickets
 
-    # --- 1. Resource Percentage Remaining ---
-    # Simplified DLS-inspired resource calculation
-    # Resources depend on both overs and wickets remaining
+    # Resource calculation
     wicket_resource = _wicket_resources(wickets_remaining)
     over_resource = overs_remaining / total_overs
     resources_remaining = wicket_resource * over_resource
 
-    # --- 2. Run Rate Analysis ---
     current_rr = runs / max(overs, 0.1)
 
+    # Chase analysis
     if target is not None and not batting_first:
-        # Chasing — compute required rate
         runs_needed = target - runs
         required_rr = runs_needed / max(overs_remaining, 0.1)
-        rr_ratio = required_rr / max(current_rr, 0.1)
-
-        # The further behind the required rate, the worse it looks
-        chase_difficulty = np.clip(rr_ratio, 0, 5)
+        chase_difficulty = np.clip(required_rr / max(current_rr, 0.1), 0, 5)
     else:
         runs_needed = 0
         required_rr = 0
         chase_difficulty = 1.0
 
-    # --- 3. Pakistan Collapse Probability ---
+    # Collapse risk
     collapse_base = COLLAPSE_BASE_RATES.get(match_format, 0.18)
-
-    # Collapse risk increases with each wicket lost
-    if wickets >= 3:
-        collapse_risk = collapse_base * (1 + (wickets - 2) * 0.15)
-    else:
-        collapse_risk = collapse_base * 0.5
-
-    # Short partnerships increase collapse risk
+    collapse_risk = collapse_base * (1 + max(0, wickets - 2) * 0.15) if wickets >= 3 else collapse_base * 0.5
     if partnership_balls < 12 and wickets >= 2:
         collapse_risk *= 1.3
 
-    # --- 4. Momentum Analysis ---
-    momentum_factor = 1.0
-    if last_six_overs_runs and len(last_six_overs_runs) >= 3:
-        recent_rr = sum(last_six_overs_runs[-3:]) / 3
-        if current_rr > 0:
-            momentum_factor = recent_rr / (current_rr * (total_overs / 6))
-        # Declining momentum = bad
-        if momentum_factor < 0.8:
-            collapse_risk *= 1.2
-
-    # --- 5. Compute Final Loss Probability ---
+    # Loss probability
     if batting_first:
-        # Batting first: project total score and assess if it's enough
-        projected_score = runs + (current_rr * overs_remaining * resources_remaining * 6 / total_overs * total_overs)
-        projected_score = max(projected_score, runs)
-
-        # Historical averages for winning first-innings scores
+        projected_score = runs + (current_rr * overs_remaining * resources_remaining)
         winning_scores = {"ODI": 280, "T20I": 170, "Test": 350}
-        target_score = winning_scores.get(match_format, 280)
-
-        score_ratio = projected_score / target_score
-        base_loss_prob = 1 - np.clip(score_ratio * 0.6, 0, 0.85)
-
-        # Factor in collapse risk
-        loss_prob = base_loss_prob + (collapse_risk * 0.3)
-
+        score_ratio = projected_score / winning_scores.get(match_format, 280)
+        loss_prob = (1 - np.clip(score_ratio * 0.6, 0, 0.85)) + collapse_risk * 0.3
     else:
-        # Chasing: combine chase difficulty with resources and collapse risk
         if runs_needed <= 0:
-            loss_prob = 0.01  # Already won basically
+            loss_prob = 0.01
         else:
-            # Base probability from chase difficulty
-            base_chase_prob = np.clip(
-                0.3 + (chase_difficulty - 1) * 0.25, 0.1, 0.95
-            )
-
-            # Adjust for resources remaining
-            resource_factor = 1 - resources_remaining
-            loss_prob = base_chase_prob * (0.5 + resource_factor * 0.5)
-
-            # Collapse risk is more impactful when chasing
-            loss_prob += collapse_risk * 0.35
-
-            # Pakistan pressure factor when required rate is high
-            if required_rr > 8.0 and match_format in ("ODI", "T20I"):
+            base_chase = np.clip(0.3 + (chase_difficulty - 1) * 0.25, 0.1, 0.95)
+            loss_prob = base_chase * (0.5 + (1 - resources_remaining) * 0.5) + collapse_risk * 0.35
+            if required_rr > 8.0:
                 loss_prob *= CHOKE_MULTIPLIER * 0.9
 
-    # Clamp
     loss_prob = float(np.clip(loss_prob, 0.02, 0.98))
     collapse_risk = float(np.clip(collapse_risk, 0, 1))
 
-    # --- Determine Alert Level ---
-    if loss_prob > 0.85:
-        alert_level = "MELTDOWN"
-    elif loss_prob > 0.70:
-        alert_level = "COLLAPSE_INCOMING"
-    elif loss_prob > 0.55:
-        alert_level = "CHOKING"
-    elif loss_prob > 0.40:
-        alert_level = "NERVOUS"
-    else:
-        alert_level = "STABLE"
+    # Alert level
+    if loss_prob > 0.85: alert_level = "MELTDOWN"
+    elif loss_prob > 0.70: alert_level = "COLLAPSE_INCOMING"
+    elif loss_prob > 0.55: alert_level = "CHOKING"
+    elif loss_prob > 0.40: alert_level = "NERVOUS"
+    else: alert_level = "STABLE"
 
-    # --- Key Factors Description ---
+    # Key factors
     key_factors = []
-    if wickets >= 5:
-        key_factors.append(f"🚨 {wickets} wickets down — deep trouble")
-    if wickets >= 3 and overs < total_overs * 0.3:
-        key_factors.append("⚠️ Early wickets — collapse pattern forming")
-    if not batting_first and required_rr > 10:
-        key_factors.append(f"📈 Required rate {required_rr:.1f} — nearly impossible")
-    elif not batting_first and required_rr > 7:
-        key_factors.append(f"📈 Required rate climbing to {required_rr:.1f}")
-    if collapse_risk > 0.4:
-        key_factors.append("💀 High collapse probability based on Pakistan patterns")
-    if partnership_balls < 12 and wickets >= 2:
-        key_factors.append("🔄 Short partnerships — no stability")
-    if not key_factors:
-        key_factors.append("📊 Match situation is still developing")
+    if wickets >= 5: key_factors.append(f"🚨 {wickets} wickets down — deep trouble")
+    if wickets >= 3 and overs < total_overs * 0.3: key_factors.append("⚠️ Early wickets — collapse pattern forming")
+    if not batting_first and required_rr > 10: key_factors.append(f"📈 Required rate {required_rr:.1f} — nearly impossible")
+    elif not batting_first and required_rr > 7: key_factors.append(f"📈 Required rate climbing to {required_rr:.1f}")
+    if collapse_risk > 0.4: key_factors.append("💀 High collapse probability based on Pakistan patterns")
+    if partnership_balls < 12 and wickets >= 2: key_factors.append("🔄 Short partnerships — no stability")
+    if not key_factors: key_factors.append("📊 Match situation is developing")
 
-    # --- Historical Comparison ---
-    historical = _find_historical_comparison(
-        match_format, runs, wickets, overs, target, batting_first
-    )
-
-    # Projected score
-    if batting_first:
-        proj_score = int(runs + current_rr * overs_remaining)
-    else:
-        proj_score = target if target else int(runs + current_rr * overs_remaining)
+    historical = _find_historical_comparison(match_format, runs, wickets, overs, target, batting_first)
+    proj_score = int(runs + current_rr * overs_remaining) if batting_first else (target or int(runs + current_rr * overs_remaining))
 
     return {
         "loss_probability": round(loss_prob * 100, 1),
@@ -289,54 +283,19 @@ def compute_live_loss_probability(
     }
 
 
-def _wicket_resources(wickets_remaining: int) -> float:
-    """
-    Resource percentage based on wickets remaining.
-    Inspired by DLS method but simplified.
-    Each wicket has diminishing value (first few are most important).
-    """
-    # Resource curve — losing top order wickets costs more
-    resource_table = {
-        10: 1.00, 9: 0.91, 8: 0.81, 7: 0.70,
-        6: 0.58, 5: 0.46, 4: 0.34, 3: 0.23,
-        2: 0.13, 1: 0.05, 0: 0.00,
-    }
-    return resource_table.get(wickets_remaining, 0.0)
+def _wicket_resources(w: int) -> float:
+    return {10:1.0,9:0.91,8:0.81,7:0.70,6:0.58,5:0.46,4:0.34,3:0.23,2:0.13,1:0.05,0:0.0}.get(w, 0.0)
 
 
-def _find_historical_comparison(
-    match_format: str,
-    runs: int,
-    wickets: int,
-    overs: float,
-    target: Optional[int],
-    batting_first: bool,
-) -> str:
-    """
-    Find a similar historical Pakistan match situation for context.
-    This makes the probability feel real — 'last time Pakistan were
-    in this situation, they...'
-    """
-    if wickets >= 5 and overs < 25 and match_format == "ODI":
-        return "Reminiscent of the 2023 WC vs India — collapsed to 191 all out after a similar position"
-
-    if wickets >= 4 and overs < 10 and match_format == "T20I":
-        return "Similar to the T20 WC 2024 group stage — top order fell apart in powerplay"
-
-    if not batting_first and target:
-        runs_needed = target - runs
-        overs_left = 50 - overs if match_format == "ODI" else 20 - overs
-        if overs_left > 0:
-            req_rr = runs_needed / overs_left
-            if req_rr > 9 and match_format == "ODI":
-                return "Pakistan have never chased at 9+ RPO for more than 10 overs in an ODI"
-            if req_rr > 12 and match_format == "T20I":
-                return "Similar required rate to the 2021 semi-final vs Australia — didn't end well"
-
-    if wickets <= 1 and overs > 15 and match_format == "ODI":
-        return "Good position but remember — Pakistan went from 150/1 to 191 all out vs India in 2023"
-
-    if batting_first and runs < 100 and overs > 25 and match_format == "ODI":
-        return "Scoring rate mirrors the 174 all out vs New Zealand at home in 2025"
-
-    return "Situation is developing — Pakistan are capable of miracles and disasters equally"
+def _find_historical_comparison(fmt, runs, wkts, overs, target, bat_first):
+    if wkts >= 5 and overs < 25 and fmt == "ODI":
+        return "Reminiscent of 2023 WC vs India — collapsed to 191 all out"
+    if wkts >= 4 and overs < 10 and fmt == "T20I":
+        return "Similar to T20 WC 2024 group stage — top order fell apart"
+    if not bat_first and target:
+        rr = (target - runs) / max(50 - overs if fmt == "ODI" else 20 - overs, 0.1)
+        if rr > 9 and fmt == "ODI": return "Pakistan have never chased at 9+ RPO for more than 10 overs"
+        if rr > 12 and fmt == "T20I": return "Similar to 2021 semi-final vs Australia — didn't end well"
+    if wkts <= 1 and overs > 15 and fmt == "ODI":
+        return "Good position but Pakistan went from 150/1 to 191 all out vs India in 2023"
+    return "Pakistan are capable of miracles and disasters equally"

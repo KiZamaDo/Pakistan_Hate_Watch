@@ -5,86 +5,79 @@ import { getAllMatches, getLiveMatches, getCricbuzzMatches } from "@/lib/api";
 import Link from "next/link";
 import {
   Radio,
-  Clock,
-  Calendar,
-  List,
   MapPin,
-  AlertTriangle,
+  Calendar,
   RefreshCw,
+  Trophy,
+  Skull,
+  ArrowRight,
+  ChevronRight,
   PartyPopper,
+  TrendingDown,
+  Flame,
 } from "lucide-react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-type TabKey = "all" | "live" | "completed" | "upcoming";
-
-const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-  { key: "all", label: "All", icon: <List className="h-4 w-4" /> },
-  { key: "live", label: "Live", icon: <Radio className="h-4 w-4" /> },
-  { key: "completed", label: "Recent", icon: <Clock className="h-4 w-4" /> },
-  { key: "upcoming", label: "Upcoming", icon: <Calendar className="h-4 w-4" /> },
+const QUOTES = [
+  "Inshallah boys played well",
+  "Ye kudrat ka nizam hai",
+  "Bhai maro mujhe maro... waqt badal diya jazbaat badal diye",
+  "Ye dukh kaahe khatam nahi hota be",
+  "I don't know the exact rule, I stop the ball I out, I don't stop the ball I out",
+  "Hum sab clap karenge aapke liye",
+  "Main hoon Sikandar... hahahaha",
+  "Yes is a two",
+  "Zara si ball idhar udhar hui, chuttad phatt gye",
+  "Green shirts, white flag energy",
+  "Chaand pe jaake jhanda lagana aur jhande pe chaand lagana — fark hai",
+  "Hum to chand pe bhi nahi ja sakte",
+  "We have the talent, just need to execute better",
+  "Pakistan cricket: 1000 ways to lose a cricket match",
+  "How can I tell you about myستراتیجی, it is a secret",
 ];
 
-function didPakLose(match: any): boolean | null {
-  const s = (match.status_text || "").toLowerCase();
+const MEME_TAGS = [
+  "🎪 Circus mode", "🤡 Clown fiesta", "💀 RIP", "🧊 Choke alert",
+  "📉 Stocks crashing", "🪦 Another one", "🎭 Drama Inc.", "🔥 Dumpster fire",
+  "🫠 Melting", "🦆 Duck season", "🏳️ Surrender mode", "🎰 Gamble",
+];
+
+function didPakLose(m: any): boolean | null {
+  const s = (m.status_text || "").toLowerCase();
   if (!s.includes("won")) return null;
   if (s.includes("pakistan won") || s.includes("pak won")) return false;
   return true;
 }
 
-export default function HomePage() {
+export default function MatchesPage() {
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState<TabKey>("all");
+  const [mode, setMode] = useState<"choose" | "win" | "learn">("choose");
+  const [quoteIdx] = useState(() => Math.floor(Math.random() * QUOTES.length));
 
   const fetchMatches = useCallback(async () => {
     setLoading(true);
-    setError("");
     try {
       const [liveData, allData, cbData] = await Promise.all([
         getLiveMatches().catch(() => ({ matches: [] })),
         getAllMatches().catch(() => ({ matches: [] })),
-        getCricbuzzMatches().catch(() => ({ matches: [], all_matches: [] })),
+        getCricbuzzMatches().catch(() => ({ matches: [] })),
       ]);
-
-      const liveMatches: any[] = (liveData as any).matches || [];
-      const allMatches: any[] = (allData as any).matches || [];
-      const cbPakMatches: any[] = (cbData as any).matches || [];
-
-      const cbNormalized = cbPakMatches.map((m: any) => ({
-        id: `cb_${m.id}`,
-        cricbuzz_id: m.id,
-        name: m.name || m.title || "",
-        status: m.status || "upcoming",
-        match_type: "",
-        venue: "",
-        date: "",
-        team1: m.teams?.[0] || "",
-        team2: m.teams?.[1] || "",
-        team1_img: "",
-        team2_img: "",
-        scores: [],
-        status_text: m.name || "",
-        series: "",
-        source: "cricbuzz",
+      const live: any[] = (liveData as any).matches || [];
+      const all: any[] = (allData as any).matches || [];
+      const cb: any[] = ((cbData as any).matches || []).map((m: any) => ({
+        id: `cb_${m.id}`, name: m.name || "", status: m.status || "upcoming",
+        match_type: "", venue: "", date: "",
+        team1: m.teams?.[0] || "", team2: m.teams?.[1] || "",
+        team1_img: "", team2_img: "", scores: [], status_text: m.name || "", source: "cricbuzz",
       }));
-
       const seen = new Set<string>();
       const merged: any[] = [];
-      for (const m of liveMatches) {
-        if (m.id && !seen.has(m.id)) { seen.add(m.id); merged.push({ ...m, source: "cricapi" }); }
-      }
-      for (const m of allMatches) {
-        if (m.id && !seen.has(m.id)) { seen.add(m.id); merged.push({ ...m, source: "cricapi" }); }
-      }
-      for (const m of cbNormalized) {
-        const words = m.name.toLowerCase().split(/\s+/);
-        const dup = merged.some((ex) => {
-          const ew = (ex.name || "").toLowerCase();
-          return words.filter((w: string) => w.length > 3 && ew.includes(w)).length >= 2;
-        });
-        if (!dup) merged.push(m);
+      for (const m of [...live, ...all]) { if (m.id && !seen.has(m.id)) { seen.add(m.id); merged.push(m); } }
+      for (const m of cb) {
+        const w = m.name.toLowerCase().split(/\s+/);
+        if (!merged.some((e) => w.filter((x: string) => x.length > 3 && (e.name || "").toLowerCase().includes(x)).length >= 2)) merged.push(m);
       }
       merged.sort((a, b) => {
         if (a.status === "live" && b.status !== "live") return -1;
@@ -92,251 +85,297 @@ export default function HomePage() {
         return (b.date || "").localeCompare(a.date || "");
       });
       setMatches(merged);
-    } catch {
-      setError("Could not fetch matches. Make sure the backend is running.");
-    } finally {
-      setLoading(false);
-    }
+    } catch { /* */ } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { fetchMatches(); }, [fetchMatches]);
 
-  const filtered = activeTab === "all" ? matches : matches.filter((m) => m.status === activeTab);
-  const liveCount = matches.filter((m) => m.status === "live").length;
+  const liveMatches = matches.filter((m) => m.status === "live");
+  const upcoming = matches.filter((m) => m.status === "upcoming");
+  const completed = matches.filter((m) => m.status === "completed");
+  const losses = completed.filter((m) => didPakLose(m) === true);
+  const wins = completed.filter((m) => didPakLose(m) === false);
+  const q = QUOTES[quoteIdx];
 
   return (
-    <div className="max-w-5xl space-y-6">
-      {/* Tabs */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
-              activeTab === tab.key
-                ? "bg-pak-green-dim text-pak-green border-pak-green/30"
-                : "text-text-muted hover:text-text-secondary bg-bg-card border-border hover:border-pak-green/20"
-            }`}
-          >
-            {tab.icon}
-            {tab.label}
-            {tab.key === "live" && liveCount > 0 && (
-              <span className="h-5 min-w-5 flex items-center justify-center rounded-full bg-status-live text-white text-xs font-bold px-1 animate-live">
-                {liveCount}
-              </span>
-            )}
-          </button>
-        ))}
-        <button
-          onClick={fetchMatches}
-          disabled={loading}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs text-text-muted hover:text-pak-green bg-bg-card border border-border hover:border-pak-green/20 transition-all disabled:opacity-50"
-        >
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} /> Refresh
-        </button>
+    <div className="max-w-5xl">
+      {/* ─── LIVE TICKER ─── */}
+      {liveMatches.length > 0 && (
+        <div className="mb-6">
+          {liveMatches.map((m) => (
+            <Link key={m.id} href={`/match/${m.id}`}
+              className="flex items-center gap-4 rounded-2xl border-2 border-status-live/40 bg-status-live/5 px-5 py-4 glow-red group hover:border-status-live transition-all">
+              <span className="h-3 w-3 rounded-full bg-status-live animate-live shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-black text-status-live tracking-widest mb-1">LIVE — MELTDOWN WATCH</div>
+                <div className="text-sm font-bold text-text-primary truncate">{m.name}</div>
+                {m.scores?.length > 0 && (
+                  <div className="flex flex-wrap gap-x-4 mt-1">
+                    {m.scores.map((s: any, i: number) => (
+                      <span key={i} className={`text-xs font-mono ${(s.inning||"").toLowerCase().includes("pakistan") ? "text-pak-green font-bold" : "text-text-muted"}`}>
+                        {s.inning}: {s.runs}/{s.wickets} ({s.overs})
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <ChevronRight className="h-5 w-5 text-status-live shrink-0 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* ─── QUOTE MARQUEE ─── */}
+      <div className="text-center mb-6 py-3 border-y border-border/30">
+        <p className="text-sm text-text-secondary italic">&ldquo;{q}&rdquo;</p>
       </div>
 
-      {/* Error */}
-      {error && (
-        <div className="rounded-xl bg-accent-orange/10 border border-accent-orange/20 p-4 text-sm text-accent-orange flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium">No live data available</p>
-            <p className="text-xs mt-1 opacity-80">{error}</p>
+      {/* ─── THE SPLIT CHOICE ─── */}
+      {mode === "choose" && (
+        <div className="relative">
+          {/* Split layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 min-h-[380px] rounded-2xl overflow-hidden border border-border">
+            {/* LEFT — Ya to Win */}
+            <button onClick={() => setMode("win")}
+              className="relative p-8 md:p-10 text-left bg-bg-secondary group hover:bg-pak-green/5 transition-all border-b md:border-b-0 md:border-r border-border overflow-hidden">
+              <div className="absolute -right-8 -bottom-8 text-[120px] leading-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity select-none">🤞</div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold text-pak-green bg-pak-green/10 px-3 py-1 rounded-full">UPCOMING</span>
+                <h2 className="text-3xl md:text-4xl font-black text-text-primary mt-4 mb-2 leading-none">
+                  Ya to<br /><span className="text-pak-green">Win</span> hai
+                </h2>
+                <p className="text-sm text-text-muted mb-5 max-w-[280px]">
+                  Upcoming fixtures with calculated loss probability. Spoiler: it&apos;s always high.
+                </p>
+                <div className="text-xs text-text-muted mb-4">{upcoming.length} upcoming · {wins.length} boring wins</div>
+                <span className="inline-flex items-center gap-2 text-sm font-bold text-pak-green group-hover:gap-3 transition-all">
+                  Enter <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </button>
+
+            {/* RIGHT — Ya to Learn */}
+            <button onClick={() => setMode("learn")}
+              className="relative p-8 md:p-10 text-left bg-bg-secondary group hover:bg-accent-red/5 transition-all overflow-hidden">
+              <div className="absolute -right-8 -bottom-8 text-[120px] leading-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity select-none">💀</div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold text-accent-red bg-accent-red/10 px-3 py-1 rounded-full">RESULTS</span>
+                <h2 className="text-3xl md:text-4xl font-black text-text-primary mt-4 mb-2 leading-none">
+                  Ya to<br /><span className="text-accent-red">Learn</span> hai
+                </h2>
+                <p className="text-sm text-text-muted mb-5 max-w-[280px]">
+                  Recent results with full scorecards. Mostly defeats. Obviously.
+                </p>
+                <div className="text-xs text-text-muted mb-4">{losses.length} defeats · {completed.length} total completed</div>
+                <span className="inline-flex items-center gap-2 text-sm font-bold text-accent-red group-hover:gap-3 transition-all">
+                  Enter <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </button>
           </div>
+
+          {/* VS divider (desktop) */}
+          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 h-14 w-14 rounded-full bg-bg-primary border-2 border-border items-center justify-center">
+            <span className="text-lg font-black text-text-muted">VS</span>
+          </div>
+        </div>
+      )}
+
+      {/* ─── YA TO WIN HAI ─── */}
+      {mode === "win" && (
+        <div>
+          <div className="flex items-center justify-between mb-5">
+            <button onClick={() => setMode("choose")} className="text-sm text-pak-green hover:underline flex items-center gap-1">← Back</button>
+            <button onClick={fetchMatches} disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-text-muted bg-bg-card border border-border">
+              <RefreshCw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} /> Refresh
+            </button>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-2xl font-black text-pak-green">🤞 Ya to Win hai</h2>
+            <p className="text-xs text-text-muted mt-1">Dream on. Here&apos;s the data on why you shouldn&apos;t.</p>
+          </div>
+
+          {upcoming.length === 0 && !loading ? (
+            <div className="text-center py-16 text-text-muted">
+              <div className="text-5xl mb-4">🏖️</div>
+              <p className="font-medium">No upcoming matches</p>
+              <p className="text-xs mt-1">The world gets a break</p>
+            </div>
+          ) : (
+            /* ─── TABLE STYLE, not cards ─── */
+            <div className="rounded-xl border border-border overflow-hidden">
+              {/* Header */}
+              <div className="grid grid-cols-[1fr_100px_120px] md:grid-cols-[1fr_140px_100px_150px] bg-bg-secondary px-4 py-2.5 border-b border-border text-[10px] font-bold text-text-muted uppercase tracking-wider">
+                <div>Match</div>
+                <div className="hidden md:block">Date</div>
+                <div className="text-center">Loss %</div>
+                <div className="text-right">Verdict</div>
+              </div>
+              {/* Rows */}
+              {upcoming.map((m, i) => {
+                const lp = m.loss_probability;
+                const lossPct = lp?.loss_probability || 50;
+                const verdict = lp?.verdict || "🎲 Unknown";
+                const meme = MEME_TAGS[(i * 7 + 3) % MEME_TAGS.length];
+                return (
+                  <Link key={m.id} href={`/match/${m.id}`}
+                    className={`grid grid-cols-[1fr_100px_120px] md:grid-cols-[1fr_140px_100px_150px] items-center px-4 py-3 border-b border-border/40 hover:bg-pak-green/5 transition-all group ${i % 2 === 0 ? "bg-bg-card" : "bg-bg-secondary/30"}`}>
+                    {/* Match info */}
+                    <div className="min-w-0 pr-3">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        {m.match_type && <span className="text-[9px] font-bold bg-pak-green-dim text-pak-green px-1.5 py-0.5 rounded shrink-0">{m.match_type}</span>}
+                        <span className="text-sm font-bold text-text-primary truncate group-hover:text-pak-green transition-colors">{m.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] text-text-muted">
+                        {m.venue && <span className="flex items-center gap-0.5 truncate"><MapPin className="h-2.5 w-2.5 shrink-0" />{m.venue}</span>}
+                        <span className="text-accent-orange italic hidden sm:inline">{meme}</span>
+                      </div>
+                    </div>
+                    {/* Date */}
+                    <div className="hidden md:block text-xs text-text-muted">{m.date || "TBD"}</div>
+                    {/* Loss % — big, colored */}
+                    <div className="text-center">
+                      <span className={`text-lg font-black font-mono ${
+                        lossPct >= 70 ? "text-accent-red" : lossPct >= 50 ? "text-accent-orange" : lossPct >= 35 ? "text-accent-yellow" : "text-pak-green"
+                      }`}>{lossPct}%</span>
+                    </div>
+                    {/* Verdict */}
+                    <div className="text-right text-[10px] text-text-muted leading-tight">{verdict}</div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Quote between sections */}
+          {upcoming.length > 0 && (
+            <div className="text-center py-4">
+              <p className="text-xs text-text-muted italic">&ldquo;{QUOTES[(quoteIdx + 4) % QUOTES.length]}&rdquo;</p>
+            </div>
+          )}
+
+          {/* Boring wins, collapsed */}
+          {wins.length > 0 && (
+            <details className="mt-4">
+              <summary className="text-xs text-text-muted cursor-pointer hover:text-text-secondary">
+                😴 {wins.length} boring win{wins.length > 1 ? "s" : ""} nobody asked for
+              </summary>
+              <div className="mt-2 space-y-1 opacity-40">
+                {wins.map((m) => (
+                  <Link key={m.id} href={`/match/${m.id}`} className="block text-xs text-text-muted py-1.5 px-3 rounded hover:bg-bg-card">
+                    {m.name} — {m.status_text}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          )}
+        </div>
+      )}
+
+      {/* ─── YA TO LEARN HAI ─── */}
+      {mode === "learn" && (
+        <div>
+          <div className="flex items-center justify-between mb-5">
+            <button onClick={() => setMode("choose")} className="text-sm text-accent-red hover:underline flex items-center gap-1">← Back</button>
+            <button onClick={fetchMatches} disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-text-muted bg-bg-card border border-border">
+              <RefreshCw className={`h-3 w-3 ${loading ? "animate-spin" : ""}`} /> Refresh
+            </button>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-2xl font-black text-accent-red">📚 Ya to Learn hai</h2>
+            <p className="text-xs text-text-muted mt-1">Spoiler: They never learn. Click any match for the full scorecard.</p>
+          </div>
+
+          {losses.length === 0 && !loading ? (
+            <div className="text-center py-16 text-text-muted">
+              <div className="text-5xl mb-4">🤯</div>
+              <p className="font-medium">No recent losses?!</p>
+              <p className="text-xs mt-1">Something is broken. Pakistan ALWAYS has recent losses.</p>
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {losses.map((match, i) => {
+                const scores = match.scores || [];
+                const meme = MEME_TAGS[(i * 5 + 2) % MEME_TAGS.length];
+                return (
+                  <div key={match.id}>
+                    <Link href={`/match/${match.id}`}
+                      className="block rounded-xl border border-pak-green/20 bg-gradient-to-r from-pak-green/[0.06] to-transparent p-4 hover:from-pak-green/[0.12] transition-all group">
+                      {/* Row 1: celebration + name */}
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <PartyPopper className="h-3.5 w-3.5 text-pak-green shrink-0" />
+                            <span className="text-[10px] font-black text-pak-green">🎉 PAKISTAN LOST</span>
+                            {match.match_type && (
+                              <span className="text-[9px] font-bold bg-pak-green-dim text-pak-green px-1.5 py-0.5 rounded">{match.match_type}</span>
+                            )}
+                            <span className="text-[10px] text-accent-orange italic hidden sm:inline">{meme}</span>
+                          </div>
+                          <h3 className="text-sm font-bold text-text-primary group-hover:text-pak-green transition-colors truncate">{match.name}</h3>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-pak-green shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+
+                      {/* Row 2: inline scores */}
+                      {scores.length > 0 && (
+                        <div className="flex flex-wrap gap-x-4 gap-y-0.5 mb-2">
+                          {scores.map((s: any, j: number) => {
+                            const isPak = (s.inning || "").toLowerCase().includes("pakistan");
+                            return (
+                              <span key={j} className={`text-xs font-mono ${isPak ? "text-pak-green font-bold" : "text-text-muted"}`}>
+                                {s.inning}: <strong>{s.runs}/{s.wickets}</strong> ({s.overs})
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* Row 3: result + meta */}
+                      <div className="flex flex-wrap items-center gap-3 text-[10px] text-text-muted">
+                        <span className="text-pak-green font-medium">🎉 {match.status_text}</span>
+                        {match.venue && <span className="flex items-center gap-0.5"><MapPin className="h-2.5 w-2.5" />{match.venue}</span>}
+                        {match.date && <span className="flex items-center gap-0.5"><Calendar className="h-2.5 w-2.5" />{match.date}</span>}
+                      </div>
+                    </Link>
+
+                    {/* Sprinkle quotes */}
+                    {i % 3 === 1 && i < losses.length - 1 && (
+                      <div className="text-center py-2.5">
+                        <p className="text-[11px] text-text-muted italic">&ldquo;{QUOTES[(i + 5) % QUOTES.length]}&rdquo;</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Other completed */}
+          {completed.length > losses.length && (
+            <details className="mt-6">
+              <summary className="text-xs text-text-muted cursor-pointer hover:text-text-secondary">
+                😴 {completed.length - losses.length} other result{completed.length - losses.length > 1 ? "s" : ""} (wins, draws, abandoned)
+              </summary>
+              <div className="mt-2 space-y-1 opacity-40">
+                {completed.filter(m => didPakLose(m) !== true).map((m) => (
+                  <Link key={m.id} href={`/match/${m.id}`} className="block text-xs text-text-muted py-1.5 px-3 rounded hover:bg-bg-card">
+                    {m.name} — {m.status_text}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          )}
         </div>
       )}
 
       {/* Loading */}
-      {loading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="rounded-xl bg-bg-card border border-border h-52 animate-pulse" />
-          ))}
-        </div>
-      )}
-
-      {/* Empty */}
-      {!loading && filtered.length === 0 && (
-        <div className="rounded-xl bg-bg-card border border-border p-12 text-center">
-          <Calendar className="h-10 w-10 text-text-muted mx-auto mb-3" />
-          <p className="text-text-secondary font-medium">
-            {activeTab === "live" ? "No live Pakistan matches right now" :
-             activeTab === "upcoming" ? "No upcoming Pakistan matches" : "No matches found"}
-          </p>
-        </div>
-      )}
-
-      {/* Match Grid — Boxed cards */}
-      {!loading && filtered.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filtered.map((match) => (
-            <MatchBox key={match.id} match={match} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ========== MATCH BOX CARD ========== */
-
-function MatchBox({ match }: { match: any }) {
-  const scores = match.scores || [];
-  const lost = didPakLose(match);
-  const isLive = match.status === "live";
-  const isUpcoming = match.status === "upcoming";
-
-  // FESTIVE = Pakistan lost (celebrate the pain 🎉)
-  // DULL = Pakistan won (boring, who cares)
-  const festive = lost === true;
-  const dull = lost === false;
-
-  return (
-    <Link
-      href={`/match/${match.id}`}
-      className={`block rounded-xl border overflow-hidden transition-all group relative ${
-        festive
-          ? "bg-gradient-to-br from-pak-green/20 via-bg-card to-accent-yellow/10 border-pak-green/50 hover:border-pak-green glow-green"
-          : dull
-          ? "bg-bg-card/50 border-border/40 opacity-50 hover:opacity-70 grayscale-[30%]"
-          : isLive
-          ? "bg-bg-card border-status-live/40 glow-red"
-          : "bg-bg-card border-border hover:border-pak-green/30"
-      }`}
-    >
-      {/* Top banner */}
-      {festive && (
-        <div className="bg-pak-green/25 border-b border-pak-green/30 px-4 py-1.5 flex items-center justify-between">
-          <span className="text-[11px] font-bold text-pak-green flex items-center gap-1.5">
-            <PartyPopper className="h-3.5 w-3.5" />
-            🎉 PAKISTAN LOST — HATE WATCH HIGHLIGHT 🎊
-          </span>
-        </div>
-      )}
-      {dull && (
-        <div className="bg-bg-secondary/40 border-b border-border/30 px-4 py-1">
-          <span className="text-[10px] text-text-muted">😴 Pakistan won — nothing to see here</span>
-        </div>
-      )}
-      {isLive && (
-        <div className="bg-status-live/15 border-b border-status-live/25 px-4 py-1.5 flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-status-live animate-live" />
-          <span className="text-[11px] font-bold text-status-live">LIVE — POTENTIAL MELTDOWN</span>
-        </div>
-      )}
-
-      <div className="p-4 space-y-3">
-        {/* Format + venue row */}
-        <div className="flex items-center gap-2 text-[10px] text-text-muted">
-          {match.match_type && (
-            <span className="bg-pak-green-dim text-pak-green px-2 py-0.5 rounded font-semibold">
-              {match.match_type}
-            </span>
-          )}
-          {match.venue && (
-            <span className="flex items-center gap-1 truncate">
-              <MapPin className="h-2.5 w-2.5 shrink-0" />{match.venue}
-            </span>
-          )}
-        </div>
-
-        {/* Team 1 row */}
-        <TeamScoreRow
-          name={match.team1}
-          img={match.team1_img}
-          scores={scores}
-          isPak={(match.team1 || "").toLowerCase().includes("pakistan")}
-          festive={festive}
-        />
-
-        {/* VS divider */}
-        <div className="text-center text-[10px] text-text-muted font-bold tracking-widest">VS</div>
-
-        {/* Team 2 row */}
-        <TeamScoreRow
-          name={match.team2}
-          img={match.team2_img}
-          scores={scores}
-          isPak={(match.team2 || "").toLowerCase().includes("pakistan")}
-          festive={festive}
-        />
-
-        {/* Result / status */}
-        {match.status_text && (
-          <div className={`text-xs font-medium pt-2 border-t border-border/30 ${
-            festive ? "text-pak-green" :
-            dull ? "text-text-muted/60" :
-            isLive ? "text-status-live animate-live" :
-            "text-text-muted"
-          }`}>
-            {festive && "🎉 "}{match.status_text}
-          </div>
-        )}
-
-        {/* Date for upcoming */}
-        {isUpcoming && match.date && (
-          <div className="text-[10px] text-text-muted flex items-center gap-1">
-            <Calendar className="h-3 w-3" /> {match.date}
-          </div>
-        )}
-      </div>
-
-      {/* Hover hint */}
-      <div className="absolute bottom-2 right-3 text-[10px] text-pak-green opacity-0 group-hover:opacity-100 transition-opacity">
-        View scorecard →
-      </div>
-    </Link>
-  );
-}
-
-/* ========== TEAM SCORE ROW ========== */
-
-function TeamScoreRow({
-  name, img, scores, isPak, festive,
-}: {
-  name: string;
-  img?: string;
-  scores: any[];
-  isPak: boolean;
-  festive: boolean;
-}) {
-  const teamWord = (name || "").toLowerCase().split(" ")[0];
-  const teamScores = scores.filter((s: any) =>
-    (s.inning || "").toLowerCase().includes(teamWord)
-  );
-
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        {img ? (
-          <img src={img} alt={name} className="h-8 w-8 rounded-full object-cover border border-border" />
-        ) : (
-          <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold border ${
-            isPak
-              ? "bg-pak-green-dim text-pak-green border-pak-green/30"
-              : "bg-bg-secondary text-text-muted border-border"
-          }`}>
-            {name?.charAt(0)}
-          </div>
-        )}
-        <span className={`text-sm font-semibold ${
-          isPak ? (festive ? "text-pak-green" : "text-pak-green") : "text-text-primary"
-        }`}>
-          {name || "TBD"}
-        </span>
-      </div>
-
-      {/* Scores — show all innings for this team */}
-      {teamScores.length > 0 && (
-        <div className="flex flex-col items-end gap-0.5">
-          {teamScores.map((s: any, i: number) => (
-            <span key={i} className="text-sm font-mono font-bold text-text-primary">
-              {s.runs}/{s.wickets}
-              <span className="text-text-muted font-normal text-[10px] ml-1">({s.overs})</span>
-            </span>
-          ))}
-        </div>
+      {loading && mode !== "choose" && (
+        <div className="space-y-3 mt-4">{[1,2,3].map((i) => (<div key={i} className="h-16 rounded-xl bg-bg-card border border-border animate-pulse" />))}</div>
       )}
     </div>
   );

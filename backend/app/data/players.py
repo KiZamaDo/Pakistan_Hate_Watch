@@ -611,7 +611,7 @@ PLAYER_PROFILES = [
         },
         "red_flags": [
             {"flag": "ICC Knockout Average: 3.0", "severity": "critical", "evidence": "12 runs in 4 ICC knockout innings. THREE POINT ZERO average. 'Wide Ball' extends to his batting too."},
-            {"flag": "Wides at Crucial Moments", "severity": "critical", "evidence": "Bowls crucial wides in pressure situations. The T20 WC 2022 final wide is seared into memory."},
+            {"flag": "Wides at Crucial Moments", "severity": "critical", "evidence": "Bowled a no-ball + wide in the last over vs India at T20 WC 2022 at MCG. Ashwin left the wide to level scores, then hit the winning runs. That over had everything — wicket, no-ball, wide, bowled on free hit, and India won."},
             {"flag": "Batting SR 108 vs Test Nations", "severity": "major", "evidence": "Cannot bat against real bowling. Only useful against minnows."},
         ],
         "performance_trend": [
@@ -629,6 +629,6 @@ PLAYER_PROFILES = [
             "That wide in the WC final could happen to anyone",
             "'Wide Ball' — his signature delivery",
         ],
-        "verdict_summary": "'Wide Ball' Nawaz — ICC knockout batting average of 3.0. THREE. Bowls wides at the worst moments. The T20 WC 2022 final wide will haunt Pakistan cricket forever. A bits-and-pieces player whose bits keep falling off in big games.",
+        "verdict_summary": "'Wide Ball' Nawaz — ICC knockout batting average of 3.0. THREE. Bowled a no-ball AND a wide in the last over vs India at T20 WC 2022, handing them the win. That single over contained a wicket, no-ball, free hit, wide, bowled, and a run out attempt. A bits-and-pieces player whose bits keep falling off in big games.",
     },
 ]

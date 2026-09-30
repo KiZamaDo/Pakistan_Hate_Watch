@@ -11,7 +11,7 @@ from fastapi import APIRouter, Query
 from typing import Optional
 
 from app.services.cricket_api import get_current_matches, get_all_matches, get_match_detail
-from app.engines.probability_engine import compute_live_loss_probability
+from app.engines.probability_engine import compute_live_loss_probability, compute_prematch_loss_probability
 from app.engines.fraud_engine import compute_fraud_score, get_fraud_rating_label
 from app.data.players import PLAYER_PROFILES
 
@@ -28,12 +28,25 @@ async def live_matches():
 async def all_matches(
     status: Optional[str] = Query(None, description="Filter: live, completed, upcoming"),
 ):
-    """Get all Pakistan matches, optionally filtered by status."""
+    """Get all Pakistan matches, optionally filtered by status.
+    Upcoming matches are enriched with loss probability."""
     data = await get_all_matches()
     matches = data.get("matches", [])
 
     if status:
         matches = [m for m in matches if m["status"] == status]
+
+    # Enrich upcoming matches with loss probability
+    for m in matches:
+        if m.get("status") == "upcoming":
+            opponent = m.get("opponent", "") or m.get("team2", "") or m.get("team1", "")
+            # If Pakistan is team2, opponent is team1
+            if "pakistan" in (m.get("team2", "") or "").lower():
+                opponent = m.get("team1", "")
+            venue = m.get("venue", "")
+            fmt = m.get("match_type", "ODI")
+            is_home = "pakistan" in venue.lower() or "lahore" in venue.lower() or "karachi" in venue.lower() or "rawalpindi" in venue.lower()
+            m["loss_probability"] = compute_prematch_loss_probability(opponent, fmt, venue, is_home)
 
     return {
         "matches": matches,

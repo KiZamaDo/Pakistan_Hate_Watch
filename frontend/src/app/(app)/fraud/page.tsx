@@ -281,34 +281,35 @@ function PlayerFraudCard({
             <div>
               <h4 className="text-xs font-bold text-text-muted uppercase mb-2 flex items-center gap-1">
                 <TrendingDown className="h-3 w-3 text-accent-orange" />
-                Performance Trend
+                Performance Trend (Strike Rate)
               </h4>
-              <div className="flex gap-1 items-end h-20">
-                {player.performance_trend.map((t: any, i: number) => {
-                  const maxAvg = Math.max(
-                    ...player.performance_trend.map((x: any) => x.average)
-                  );
-                  const height = maxAvg > 0 ? (t.average / maxAvg) * 100 : 0;
+              <div className="flex gap-1 items-end h-24">
+                {player.performance_trend
+                  .filter((t: any) => t.matches > 0)
+                  .map((t: any, i: number) => {
+                  const val = t.strike_rate || t.average || 0;
+                  const allVals = player.performance_trend
+                    .filter((x: any) => x.matches > 0)
+                    .map((x: any) => x.strike_rate || x.average || 0);
+                  const maxVal = Math.max(...allVals, 1);
+                  const height = Math.max((val / maxVal) * 100, 4);
                   return (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                    <div key={i} className="flex-1 flex flex-col items-center gap-1" title={`${t.period}: SR ${t.strike_rate}, Avg ${t.average}, ${t.matches} matches`}>
+                      <span className="text-[8px] text-text-muted font-mono">{Math.round(val)}</span>
                       <div
-                        className={`w-full rounded-t ${
-                          t.average < 25
-                            ? "bg-accent-red"
-                            : t.average < 35
-                            ? "bg-accent-orange"
-                            : "bg-accent-blue"
+                        className={`w-full rounded-t min-h-[3px] ${
+                          val < 115 ? "bg-accent-red" : val < 130 ? "bg-accent-orange" : val < 140 ? "bg-accent-yellow" : "bg-pak-green"
                         }`}
                         style={{ height: `${height}%` }}
-                        title={`${t.period}: ${t.average} avg`}
                       />
-                      <span className="text-[8px] text-text-muted rotate-[-45deg] origin-center">
+                      <span className="text-[7px] text-text-muted whitespace-nowrap">
                         {t.period}
                       </span>
                     </div>
                   );
                 })}
               </div>
+              <p className="text-[9px] text-text-muted mt-1 italic">Bars show T20I strike rate per period. Red &lt; 115, Orange &lt; 130, Green 140+</p>
             </div>
           )}
 
