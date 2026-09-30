@@ -26,15 +26,9 @@ const QUOTES = [
   "Ye dukh kaahe khatam nahi hota be",
   "I don't know the exact rule, I stop the ball I out, I don't stop the ball I out",
   "Hum sab clap karenge aapke liye",
-  "Main hoon Sikandar... hahahaha",
   "Yes is a two",
   "Zara si ball idhar udhar hui, chuttad phatt gye",
-  "Green shirts, white flag energy",
   "Chaand pe jaake jhanda lagana aur jhande pe chaand lagana — fark hai",
-  "Hum to chand pe bhi nahi ja sakte",
-  "We have the talent, just need to execute better",
-  "Pakistan cricket: 1000 ways to lose a cricket match",
-  "How can I tell you about myستراتیجی, it is a secret",
 ];
 
 const MEME_TAGS = [
