@@ -28,7 +28,7 @@ const QUOTES = [
   "Hum sab clap karenge aapke liye",
   "Yes is a two",
   "Zara si ball idhar udhar hui, chuttad phatt gye",
-  "Chaand pe jaake jhanda lagana aur jhande pe chaand lagana — fark hai",
+  "Chaand pe jaake jhanda lagana aur jhande pe chaand lagana - fark hai",
 ];
 
 const MEME_TAGS = [
@@ -105,7 +105,7 @@ export default function MatchesPage() {
               className="flex items-center gap-4 rounded-2xl border-2 border-status-live/40 bg-status-live/5 px-5 py-4 glow-red group hover:border-status-live transition-all">
               <span className="h-3 w-3 rounded-full bg-status-live animate-live shrink-0" />
               <div className="flex-1 min-w-0">
-                <div className="text-[10px] font-black text-status-live tracking-widest mb-1">LIVE — MELTDOWN WATCH</div>
+                <div className="text-[10px] font-black text-status-live tracking-widest mb-1">LIVE - MELTDOWN WATCH</div>
                 <div className="text-sm font-bold text-text-primary truncate">{m.name}</div>
                 {m.scores?.length > 0 && (
                   <div className="flex flex-wrap gap-x-4 mt-1">
@@ -133,7 +133,7 @@ export default function MatchesPage() {
         <div className="relative">
           {/* Split layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 min-h-[380px] rounded-2xl overflow-hidden border border-border">
-            {/* LEFT — Ya to Win */}
+            {/* LEFT - Ya to Win */}
             <button onClick={() => setMode("win")}
               className="relative p-8 md:p-10 text-left bg-bg-secondary group hover:bg-pak-green/5 transition-all border-b md:border-b-0 md:border-r border-border overflow-hidden">
               <div className="absolute -right-8 -bottom-8 text-[120px] leading-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity select-none">🤞</div>
@@ -152,7 +152,7 @@ export default function MatchesPage() {
               </div>
             </button>
 
-            {/* RIGHT — Ya to Learn */}
+            {/* RIGHT - Ya to Learn */}
             <button onClick={() => setMode("learn")}
               className="relative p-8 md:p-10 text-left bg-bg-secondary group hover:bg-accent-red/5 transition-all overflow-hidden">
               <div className="absolute -right-8 -bottom-8 text-[120px] leading-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity select-none">💀</div>
@@ -233,7 +233,7 @@ export default function MatchesPage() {
                     </div>
                     {/* Date */}
                     <div className="hidden md:block text-xs text-text-muted">{m.date || "TBD"}</div>
-                    {/* Loss % — big, colored */}
+                    {/* Loss % - big, colored */}
                     <div className="text-center">
                       <span className={`text-lg font-black font-mono ${
                         lossPct >= 70 ? "text-accent-red" : lossPct >= 50 ? "text-accent-orange" : lossPct >= 35 ? "text-accent-yellow" : "text-pak-green"
@@ -263,7 +263,7 @@ export default function MatchesPage() {
               <div className="mt-2 space-y-1 opacity-40">
                 {wins.map((m) => (
                   <Link key={m.id} href={`/match/${m.id}`} className="block text-xs text-text-muted py-1.5 px-3 rounded hover:bg-bg-card">
-                    {m.name} — {m.status_text}
+                    {m.name} - {m.status_text}
                   </Link>
                 ))}
               </div>
@@ -362,7 +362,7 @@ export default function MatchesPage() {
               <div className="mt-2 space-y-1 opacity-40">
                 {completed.filter(m => didPakLose(m) !== true).map((m) => (
                   <Link key={m.id} href={`/match/${m.id}`} className="block text-xs text-text-muted py-1.5 px-3 rounded hover:bg-bg-card">
-                    {m.name} — {m.status_text}
+                    {m.name} - {m.status_text}
                   </Link>
                 ))}
               </div>

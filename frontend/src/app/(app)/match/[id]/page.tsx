@@ -54,11 +54,11 @@ export default function MatchDetailPage() {
     setError("");
     try {
       if (isCricbuzz && realCbId) {
-        // Cricbuzz match — fetch scorecard directly
+        // Cricbuzz match - fetch scorecard directly
         const sc = await getCricbuzzScorecard(realCbId);
         setCbScorecard(sc);
       } else {
-        // CricAPI match — fetch detail + try Cricbuzz scorecard as supplement
+        // CricAPI match - fetch detail + try Cricbuzz scorecard as supplement
         const [detail] = await Promise.all([
           getMatchDetail(matchId).catch(() => null),
         ]);
@@ -146,7 +146,7 @@ export default function MatchDetailPage() {
 
       {/* Main layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Scorecard — 2 cols */}
+        {/* Scorecard - 2 cols */}
         <div className="lg:col-span-2 space-y-4">
           {/* CricAPI innings summary (always show if available) */}
           {hasApi && data.scores?.length > 0 && (
@@ -261,7 +261,7 @@ export default function MatchDetailPage() {
           )}
         </div>
 
-        {/* Sidebar — 1 col */}
+        {/* Sidebar - 1 col */}
         <div className="space-y-4">
           {lossAnalysis && <LossPanel analysis={lossAnalysis} />}
           {fraudAlerts.length > 0 && <FraudPanel alerts={fraudAlerts} />}

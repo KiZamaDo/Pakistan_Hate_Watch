@@ -1,5 +1,5 @@
 """
-Probability Router — Real-time loss probability calculator
+Probability Router - Real-time loss probability calculator
 The crown jewel of the Hate Watch.
 """
 

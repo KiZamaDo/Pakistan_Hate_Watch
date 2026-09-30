@@ -1,5 +1,5 @@
 """
-Fraud Watch Router — Player performance fraud detection
+Fraud Watch Router - Player performance fraud detection
 """
 
 from fastapi import APIRouter, Query

@@ -1,5 +1,5 @@
 """
-Collapse Alert Router — Collapse detection and projection
+Collapse Alert Router - Collapse detection and projection
 """
 
 from fastapi import APIRouter

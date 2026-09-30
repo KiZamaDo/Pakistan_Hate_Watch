@@ -1,5 +1,5 @@
 """
-Defeats Router — Recent defeats and tournament record
+Defeats Router - Recent defeats and tournament record
 """
 
 from fastapi import APIRouter, Query

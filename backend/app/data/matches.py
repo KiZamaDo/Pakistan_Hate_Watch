@@ -30,7 +30,7 @@ UPCOMING_MATCHES = [
             {
                 "factor": "Neutral Venue (Dubai)",
                 "impact": 5,
-                "description": "Dubai is practically a home ground — slight advantage",
+                "description": "Dubai is practically a home ground - slight advantage",
             },
             {
                 "factor": "Pakistan Chaos Factor™",
@@ -123,12 +123,12 @@ UPCOMING_MATCHES = [
             {
                 "factor": "Boxing Day Pressure",
                 "impact": -15,
-                "description": "100K crowd, biggest stage — Pakistan crumble under this spotlight",
+                "description": "100K crowd, biggest stage - Pakistan crumble under this spotlight",
             },
             {
                 "factor": "Slight MCG Familiarity",
                 "impact": 5,
-                "description": "More games at MCG than Gabba — marginal comfort",
+                "description": "More games at MCG than Gabba - marginal comfort",
             },
         ],
     },
@@ -144,7 +144,7 @@ UPCOMING_MATCHES = [
             {
                 "factor": "T20 is Pakistan's Stronger Format",
                 "impact": 15,
-                "description": "Pakistan are more competitive in T20s — less time to collapse",
+                "description": "Pakistan are more competitive in T20s - less time to collapse",
             },
             {
                 "factor": "SCG Smaller Ground",
@@ -175,7 +175,7 @@ UPCOMING_MATCHES = [
             {
                 "factor": "Home Advantage",
                 "impact": 20,
-                "description": "Playing at home should help — but it hasn't always",
+                "description": "Playing at home should help - but it hasn't always",
             },
             {
                 "factor": "Bazball Effect",

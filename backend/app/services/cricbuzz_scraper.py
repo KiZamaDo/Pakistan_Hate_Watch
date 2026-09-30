@@ -2,7 +2,7 @@
 Cricbuzz Scraper Service
 ========================
 Scrapes live/recent/upcoming matches and full scorecards from Cricbuzz.
-This is an unofficial scraper — no API key needed, but it may break
+This is an unofficial scraper - no API key needed, but it may break
 if Cricbuzz changes their HTML structure.
 
 Data we extract:
@@ -168,7 +168,7 @@ async def get_scorecard(match_id: str) -> dict:
             status_text = elem.get_text(strip=True)
             break
 
-    # Parse innings — Cricbuzz uses grid-based layout
+    # Parse innings - Cricbuzz uses grid-based layout
     # Each batting/bowling grid represents one data row
     innings = _parse_innings(soup)
 
@@ -192,12 +192,12 @@ def _parse_innings(soup: BeautifulSoup) -> list[dict]:
     - scorecard-bat-grid: each batting row (header row has text "Batter")
     - scorecard-bowl-grid: each bowling row (header row has text "Bowler")
 
-    The grids are flat — each grid has child divs that are the columns.
+    The grids are flat - each grid has child divs that are the columns.
     The first grid in a batting section is the header, subsequent ones are player rows.
     """
     innings = []
 
-    # Find innings section dividers — look for innings score headers
+    # Find innings section dividers - look for innings score headers
     # They typically have the team name and score like "West Indies Innings 202-10 (44.2)"
     # These are in divs that contain both team name and score
 
@@ -222,7 +222,7 @@ def _parse_innings(soup: BeautifulSoup) -> list[dict]:
         if first_text in ("Batter", "") or len(cells) == 7:
             continue
 
-        # Extract batsman name — use profile link URL (most reliable)
+        # Extract batsman name - use profile link URL (most reliable)
         name = ""
         for link in cells[0].find_all("a"):
             href = link.get("href", "")

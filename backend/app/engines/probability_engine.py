@@ -7,9 +7,9 @@ PRE-MATCH MODE (new):
   2. Opponent ICC ranking (25%)
   3. Pakistan's recent form (25%)
   4. Venue/conditions factor (15%)
-  5. Pakistan Chaos Multiplier (15%) — because PCB drama is a real factor
+  5. Pakistan Chaos Multiplier (15%) - because PCB drama is a real factor
 
-  Output is EXAGGERATED slightly — this is a hate watch, not ESPN.
+  Output is EXAGGERATED slightly - this is a hate watch, not ESPN.
 
 LIVE MATCH MODE:
   Real-time loss probability using current match state.
@@ -109,7 +109,7 @@ def compute_prematch_loss_probability(opponent: str, match_format: str = "ODI", 
         ranking_loss_factor = 0.35
     else:
         ranking_loss_factor = 0.20  # Ranked below 12, Pakistan SHOULD win
-        # But this is Pakistan — upset potential is always there
+        # But this is Pakistan - upset potential is always there
         ranking_loss_factor += 0.10  # Even against minnows, 30% chance of embarrassment
 
     ranking_detail = f"Opponent ranked #{opp_rank}, Pakistan #{pak_rank}"
@@ -256,12 +256,12 @@ def compute_live_loss_probability(
 
     # Key factors
     key_factors = []
-    if wickets >= 5: key_factors.append(f"🚨 {wickets} wickets down — deep trouble")
-    if wickets >= 3 and overs < total_overs * 0.3: key_factors.append("⚠️ Early wickets — collapse pattern forming")
-    if not batting_first and required_rr > 10: key_factors.append(f"📈 Required rate {required_rr:.1f} — nearly impossible")
+    if wickets >= 5: key_factors.append(f"🚨 {wickets} wickets down - deep trouble")
+    if wickets >= 3 and overs < total_overs * 0.3: key_factors.append("⚠️ Early wickets - collapse pattern forming")
+    if not batting_first and required_rr > 10: key_factors.append(f"📈 Required rate {required_rr:.1f} - nearly impossible")
     elif not batting_first and required_rr > 7: key_factors.append(f"📈 Required rate climbing to {required_rr:.1f}")
     if collapse_risk > 0.4: key_factors.append("💀 High collapse probability based on Pakistan patterns")
-    if partnership_balls < 12 and wickets >= 2: key_factors.append("🔄 Short partnerships — no stability")
+    if partnership_balls < 12 and wickets >= 2: key_factors.append("🔄 Short partnerships - no stability")
     if not key_factors: key_factors.append("📊 Match situation is developing")
 
     historical = _find_historical_comparison(match_format, runs, wickets, overs, target, batting_first)
@@ -289,13 +289,13 @@ def _wicket_resources(w: int) -> float:
 
 def _find_historical_comparison(fmt, runs, wkts, overs, target, bat_first):
     if wkts >= 5 and overs < 25 and fmt == "ODI":
-        return "Reminiscent of 2023 WC vs India — collapsed to 191 all out"
+        return "Reminiscent of 2023 WC vs India - collapsed to 191 all out"
     if wkts >= 4 and overs < 10 and fmt == "T20I":
-        return "Similar to T20 WC 2024 group stage — top order fell apart"
+        return "Similar to T20 WC 2024 group stage - top order fell apart"
     if not bat_first and target:
         rr = (target - runs) / max(50 - overs if fmt == "ODI" else 20 - overs, 0.1)
         if rr > 9 and fmt == "ODI": return "Pakistan have never chased at 9+ RPO for more than 10 overs"
-        if rr > 12 and fmt == "T20I": return "Similar to 2021 semi-final vs Australia — didn't end well"
+        if rr > 12 and fmt == "T20I": return "Similar to 2021 semi-final vs Australia - didn't end well"
     if wkts <= 1 and overs > 15 and fmt == "ODI":
         return "Good position but Pakistan went from 150/1 to 191 all out vs India in 2023"
     return "Pakistan are capable of miracles and disasters equally"

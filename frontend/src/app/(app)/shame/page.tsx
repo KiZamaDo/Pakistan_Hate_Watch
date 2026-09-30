@@ -73,7 +73,7 @@ export default function ShamePage() {
       <section>
         <h2 className="text-base font-bold mb-4 flex items-center gap-2">
           <Trophy className="h-5 w-5 text-accent-yellow" />
-          Hall of Shame — Top 3
+          Hall of Shame - Top 3
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {hallOfShame.map((v: any, i: number) => (

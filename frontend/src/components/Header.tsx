@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/matches": { title: "Pakistan Matches", subtitle: "Ya to win hai... ya to learn hai 🏏" },
   "/misery": { title: "Misery Dashboard", subtitle: "The numbers that tell the whole painful story" },
-  "/fraud": { title: "Fraud Watch", subtitle: "Player performance fraud detection — who is actually delivering?" },
+  "/fraud": { title: "Fraud Watch", subtitle: "Player performance fraud detection - who is actually delivering?" },
   "/shame": { title: "Shame Gallery", subtitle: "YouTube hall of fame for Pakistan cricket's memorable defeats" },
   "/collapse": { title: "Collapse Alerts", subtitle: "Detecting and projecting Pakistan batting collapses" },
 };

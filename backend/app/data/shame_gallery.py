@@ -1,5 +1,5 @@
 """
-Shame Gallery — YouTube Videos of Pakistan's Finest Defeats
+Shame Gallery - YouTube Videos of Pakistan's Finest Defeats
 ===========================================================
 All YouTube IDs verified as working and embeddable.
 """
@@ -8,7 +8,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv1",
         "youtube_id": "OSTMKBLDoLg",
-        "title": "USA vs Pakistan — T20 World Cup 2024 Super Over Upset",
+        "title": "USA vs Pakistan - T20 World Cup 2024 Super Over Upset",
         "date": "2024-06-11",
         "opponent": "USA",
         "opponent_flag": "🇺🇸",
@@ -23,7 +23,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv2",
         "youtube_id": "-xlKTqivNlA",
-        "title": "Pakistan 114 All Out vs India — T20 World Cup 2026",
+        "title": "Pakistan 114 All Out vs India - T20 World Cup 2026",
         "date": "2026-02-15",
         "opponent": "India",
         "opponent_flag": "🇮🇳",
@@ -38,7 +38,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv3",
         "youtube_id": "LlLNbsIK7Cs",
-        "title": "Afghanistan vs Pakistan — ODI World Cup 2023",
+        "title": "Afghanistan vs Pakistan - ODI World Cup 2023",
         "date": "2023-10-14",
         "opponent": "Afghanistan",
         "opponent_flag": "🇦🇫",
@@ -53,7 +53,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv4",
         "youtube_id": "WQdqgrWvy6g",
-        "title": "India vs Pakistan — ODI World Cup 2023 Ahmedabad",
+        "title": "India vs Pakistan - ODI World Cup 2023 Ahmedabad",
         "date": "2023-10-07",
         "opponent": "India",
         "opponent_flag": "🇮🇳",
@@ -68,7 +68,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv5",
         "youtube_id": "k3kFW-J5Vv0",
-        "title": "Wade's 3 Sixes off Shaheen — T20 WC 2021 Semi-Final",
+        "title": "Wade's 3 Sixes off Shaheen - T20 WC 2021 Semi-Final",
         "date": "2021-11-11",
         "opponent": "Australia",
         "opponent_flag": "🇦🇺",
@@ -83,7 +83,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv6",
         "youtube_id": "rRdJrhZAhBo",
-        "title": "England vs Pakistan — T20 World Cup 2022 Final",
+        "title": "England vs Pakistan - T20 World Cup 2022 Final",
         "date": "2022-11-13",
         "opponent": "England",
         "opponent_flag": "🏴",
@@ -98,7 +98,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv7",
         "youtube_id": "AFEZzf9_EHk",
-        "title": "India vs Pakistan — ODI World Cup 2019 (Rohit 140)",
+        "title": "India vs Pakistan - ODI World Cup 2019 (Rohit 140)",
         "date": "2019-06-16",
         "opponent": "India",
         "opponent_flag": "🇮🇳",
@@ -113,7 +113,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv8",
         "youtube_id": "SX3X1RFhYvA",
-        "title": "Pakistan 49 All Out vs South Africa — Johannesburg 2013",
+        "title": "Pakistan 49 All Out vs South Africa - Johannesburg 2013",
         "date": "2013-02-01",
         "opponent": "South Africa",
         "opponent_flag": "🇿🇦",
@@ -127,7 +127,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv9",
         "youtube_id": "ipuhbvwZoiw",
-        "title": "Ireland vs Pakistan — ODI World Cup 2007",
+        "title": "Ireland vs Pakistan - ODI World Cup 2007",
         "date": "2007-03-17",
         "opponent": "Ireland",
         "opponent_flag": "🇮🇪",
@@ -142,7 +142,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv10",
         "youtube_id": "PnHYDRlI9ko",
-        "title": "Bangladesh vs Pakistan — Naagin Dance Celebration",
+        "title": "Bangladesh vs Pakistan - Naagin Dance Celebration",
         "date": "2018-09-26",
         "opponent": "Bangladesh",
         "opponent_flag": "🇧🇩",
@@ -157,7 +157,7 @@ SHAME_VIDEOS = [
     {
         "id": "sv11",
         "youtube_id": "oRsHzHMB8Uo",
-        "title": "Pakistan Cricket Collapses — Greatest Hits Compilation",
+        "title": "Pakistan Cricket Collapses - Greatest Hits Compilation",
         "date": "2024-01-01",
         "opponent": "Various",
         "opponent_flag": "🏏",

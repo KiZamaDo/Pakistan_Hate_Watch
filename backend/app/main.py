@@ -1,5 +1,5 @@
 """
-Pakistan Cricket Hate Watch — FastAPI Backend
+Pakistan Cricket Hate Watch - FastAPI Backend
 =============================================
 The statistical brain behind the misery.
 

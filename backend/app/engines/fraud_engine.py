@@ -132,7 +132,7 @@ def _strike_rate(stats: dict, role: str) -> float:
     sr_test = stats.get("sr_vs_test_nations", sr)
     sr_assoc = stats.get("sr_vs_associates", sr)
 
-    # Overall SR scoring — harsh below 130
+    # Overall SR scoring - harsh below 130
     if sr >= 155:
         score = 95
     elif sr >= 145:
@@ -153,11 +153,11 @@ def _strike_rate(stats: dict, role: str) -> float:
     # Stat-padding gap penalty
     sr_gap = sr_assoc - sr_test
     if sr_gap > 25:
-        score -= 25  # Massive stat-padding — Babar/Rizwan territory
+        score -= 25  # Massive stat-padding - Babar/Rizwan territory
     elif sr_gap > 15:
         score -= 12
     elif sr_gap < 10:
-        score += 10  # Honest player — same SR against everyone
+        score += 10  # Honest player - same SR against everyone
 
     return float(np.clip(score, 0, 100))
 
@@ -180,7 +180,7 @@ def _icc_tournament(stats: dict, role: str) -> float:
 
     score = 0
 
-    # WC Strike Rate — MOST IMPORTANT
+    # WC Strike Rate - MOST IMPORTANT
     if wc_sr >= 155:
         score += 40
     elif wc_sr >= 140:
@@ -202,7 +202,7 @@ def _icc_tournament(stats: dict, role: str) -> float:
     elif wc_avg > 0:
         score += 2
 
-    # T20 WC POWERPLAY SR — the killer metric
+    # T20 WC POWERPLAY SR - the killer metric
     if wc_pp_sr > 0:
         if wc_pp_sr >= 145:
             score += 20
@@ -278,23 +278,23 @@ def _make_analysis(name: str, role: str, mw: float, sr: float, icc: float, con: 
 
     if role != "Bowler":
         if wc_pp_sr > 0 and wc_pp_sr < 100:
-            parts.append(f"T20 WC powerplay SR of {wc_pp_sr} — among the worst in World Cup history")
+            parts.append(f"T20 WC powerplay SR of {wc_pp_sr} - among the worst in World Cup history")
         if ko_inn >= 3 and ko_avg < 15:
-            parts.append(f"ICC knockout average of {ko_avg} — certified big-game ghost")
+            parts.append(f"ICC knockout average of {ko_avg} - certified big-game ghost")
         if sr_val < 130 and role != "Bowler":
-            parts.append(f"T20I SR of {sr_val} is below modern standards — consuming balls others could use")
+            parts.append(f"T20I SR of {sr_val} is below modern standards - consuming balls others could use")
         gap = stats.get("sr_vs_associates", 0) - sr_test
         if gap > 20:
-            parts.append(f"SR drops {gap:.0f} points against Test nations — classic stat-padder")
+            parts.append(f"SR drops {gap:.0f} points against Test nations - classic stat-padder")
         if mom_test <= 2 and stats.get("matches", 0) > 50:
             parts.append(f"Only {mom_test} MOMs vs Test nations in {stats.get('matches', 0)} matches")
     else:
         eco = stats.get("economy_rate", 0)
         death = stats.get("death_overs_economy", 0)
         if death > 10:
-            parts.append(f"Death overs economy of {death} — gets carted when it matters")
+            parts.append(f"Death overs economy of {death} - gets carted when it matters")
         if eco > 8:
-            parts.append(f"Overall economy of {eco} — too expensive for T20Is")
+            parts.append(f"Overall economy of {eco} - too expensive for T20Is")
 
     if not parts:
         parts.append(f"{name} delivers enough to justify selection")

@@ -75,19 +75,19 @@ export default function FraudPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="bg-bg-card rounded-lg p-3 border border-border">
-            <div className="font-bold text-text-primary mb-1">🏆 Match-Winning Ability — 30%</div>
+            <div className="font-bold text-text-primary mb-1">🏆 Match-Winning Ability - 30%</div>
             <p className="text-text-muted">Man of the Match awards vs Test-playing nations (not associates). Successful chase rate vs top teams. ICC knockout batting average. More MOMs vs real teams = higher score.</p>
           </div>
           <div className="bg-bg-card rounded-lg p-3 border border-border">
-            <div className="font-bold text-text-primary mb-1">⚡ Strike Rate Analysis — 25%</div>
-            <p className="text-text-muted">Overall T20I SR (under 130 = criminal). SR vs Test nations specifically. Gap between SR vs associates and SR vs Test nations — a big gap means stat-padding. Fakhar&apos;s 132 SR &gt; Babar&apos;s 128 SR.</p>
+            <div className="font-bold text-text-primary mb-1">⚡ Strike Rate Analysis - 25%</div>
+            <p className="text-text-muted">Overall T20I SR (under 130 = criminal). SR vs Test nations specifically. Gap between SR vs associates and SR vs Test nations - a big gap means stat-padding. Fakhar&apos;s 132 SR &gt; Babar&apos;s 128 SR.</p>
           </div>
           <div className="bg-bg-card rounded-lg p-3 border border-border">
-            <div className="font-bold text-text-primary mb-1">🏏 ICC Tournament Performance — 25%</div>
-            <p className="text-text-muted">T20 World Cup average and strike rate. Powerplay SR in World Cups (Babar: 86, Rizwan: 98 — fraud territory). ICC knockout average (both under 14 — certified fraud).</p>
+            <div className="font-bold text-text-primary mb-1">🏏 ICC Tournament Performance - 25%</div>
+            <p className="text-text-muted">T20 World Cup average and strike rate. Powerplay SR in World Cups (Babar: 86, Rizwan: 98 - fraud territory). ICC knockout average (both under 14 - certified fraud).</p>
           </div>
           <div className="bg-bg-card rounded-lg p-3 border border-border">
-            <div className="font-bold text-text-primary mb-1">📈 Consistency &amp; Trend — 20%</div>
+            <div className="font-bold text-text-primary mb-1">📈 Consistency &amp; Trend - 20%</div>
             <p className="text-text-muted">Is performance improving or declining? Big match failure rate. Players dropped from the squad get penalized. SR trend matters more than average trend in T20s.</p>
           </div>
         </div>

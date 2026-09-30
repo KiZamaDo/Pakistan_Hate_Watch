@@ -1,5 +1,5 @@
 """
-Shame Gallery Router — YouTube videos of Pakistan's finest losses
+Shame Gallery Router - YouTube videos of Pakistan's finest losses
 """
 
 from fastapi import APIRouter, Query
@@ -17,7 +17,7 @@ def get_shame_videos(
     limit: int = Query(20, ge=1, le=50),
 ):
     """
-    Get the Shame Gallery — curated YouTube videos of Pakistan's most memorable defeats.
+    Get the Shame Gallery - curated YouTube videos of Pakistan's most memorable defeats.
     """
     results = SHAME_VIDEOS
 

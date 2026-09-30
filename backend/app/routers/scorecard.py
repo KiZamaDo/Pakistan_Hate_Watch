@@ -1,5 +1,5 @@
 """
-Scorecard Router — Full batting/bowling tables via Cricbuzz scraper
+Scorecard Router - Full batting/bowling tables via Cricbuzz scraper
 ===================================================================
 Cricbuzz match IDs are different from CricAPI IDs, so we:
 1. Provide a search endpoint to find a Cricbuzz match by team names

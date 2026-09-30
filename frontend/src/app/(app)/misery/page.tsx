@@ -245,7 +245,7 @@ function CategoryBlock({ title, count, total, description, matches, color }: {
         <div className="space-y-1 mt-2 pt-2 border-t border-border/30">
           {matches.map((m: any, i: number) => (
             <div key={i} className="text-[10px] text-text-muted">
-              <span className={`text-${color} font-medium`}>vs {m.opponent}</span> — {m.margin} {m.tournament && `(${m.tournament})`}
+              <span className={`text-${color} font-medium`}>vs {m.opponent}</span> - {m.margin} {m.tournament && `(${m.tournament})`}
             </div>
           ))}
         </div>

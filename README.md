@@ -6,14 +6,14 @@ A full-stack web app tracking Pakistan cricket's defeats, collapses, and disappo
 
 ## Features
 
-### 🏏 Matches — "Ya to Win hai... Ya to Learn hai"
-- **Ya to Win hai** — Upcoming Pakistan fixtures with computed loss probability (h2h record, ICC rankings, recent form, venue factor, and a Pakistan Chaos Multiplier™)
-- **Ya to Learn hai** — Recent defeats with inline scores, festive celebration styling for losses, and full scorecards via Cricbuzz scraper
+### 🏏 Matches - "Ya to Win hai... Ya to Learn hai"
+- **Ya to Win hai** - Upcoming Pakistan fixtures with computed loss probability (h2h record, ICC rankings, recent form, venue factor, and a Pakistan Chaos Multiplier™)
+- **Ya to Learn hai** - Recent defeats with inline scores, festive celebration styling for losses, and full scorecards via Cricbuzz scraper
 - Live match tracking with meltdown alerts
 - Real match data from CricketData.org API + Cricbuzz scraper for full batting/bowling scorecards
-- Iconic quotes sprinkled throughout — *"Zara si ball idhar udhar hui, chuttad phatt gye"*, *"Inshallah boys played well"*, *"Yes is a two"*
+- Iconic quotes sprinkled throughout - *"Zara si ball idhar udhar hui, chuttad phatt gye"*, *"Inshallah boys played well"*, *"Yes is a two"*
 
-### 📉 Fraud Watch — T20I Player Report Cards
+### 📉 Fraud Watch - T20I Player Report Cards
 Each player in the current Pakistan T20I squad gets a computed fraud score (0-100, lower = bigger fraud) based on:
 
 | Component | Weight | What it measures |
@@ -25,13 +25,13 @@ Each player in the current Pakistan T20I squad gets a computed fraud score (0-10
 
 Players include nicknames: Ghante Ka King (Babar Azam), Rizzu Symonds (Rizwan), Fakhar Tulla (Fakhar Zaman), Farru Ferrari (Sahibzada Farhan), Shaheen Sofa, Haris Tepia, Wide Ball (Nawaz), and more.
 
-### 💀 Misery Dashboard — Since 2022
+### 💀 Misery Dashboard - Since 2022
 - **22 defeats** tracked with proper categories:
-  - **Humiliating** — Lost by massive margins (innings defeats, 100+ runs, 8+ wickets)
-  - **Embarrassing** — Lost to minnow/lower-ranked teams (USA, Zimbabwe, Afghanistan)
-  - **Expected** — Competitive losses to higher-ranked teams
-- **ICC Tournament Record** — 0 trophies from 5 events (T20 WC 2022 Final loss, ODI WC 2023 league exit, T20 WC 2024 group stage exit, Champions Trophy 2025 host knocked out, T20 WC 2026 Super 8 exit)
-- **Home Series Record** — Won 2, Lost 4 since 2022
+  - **Humiliating** - Lost by massive margins (innings defeats, 100+ runs, 8+ wickets)
+  - **Embarrassing** - Lost to minnow/lower-ranked teams (USA, Zimbabwe, Afghanistan)
+  - **Expected** - Competitive losses to higher-ranked teams
+- **ICC Tournament Record** - 0 trophies from 5 events (T20 WC 2022 Final loss, ODI WC 2023 league exit, T20 WC 2024 group stage exit, Champions Trophy 2025 host knocked out, T20 WC 2026 Super 8 exit)
+- **Home Series Record** - Won 2, Lost 4 since 2022
 - **Head-to-Head** vs all international teams (India: 1W-10L, 8.3% win rate)
 
 ### 🎬 Shame Gallery
@@ -162,7 +162,7 @@ Open http://localhost:3000
 
 ## Dedication
 
-*To Wasay bhai, Iffi bhai, and Neem ka Ped — I owe you one* 🤝
+*To Wasay bhai, Iffi bhai, and Neem ka Ped - I owe you one* 🤝
 
 ---
 

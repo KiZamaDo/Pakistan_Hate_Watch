@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function LandingPage() {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg-primary overflow-hidden">
-      {/* Background pattern — subtle cricket stumps */}
+      {/* Background pattern - subtle cricket stumps */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300a651' stroke-width='1'%3E%3Cpath d='M15 5v50M30 5v50M45 5v50M10 8h40'/%3E%3C/g%3E%3C/svg%3E")`,
         backgroundSize: "60px 60px",
@@ -32,7 +32,7 @@ export default function LandingPage() {
 
         <p className="text-sm text-text-muted mt-4 mb-10 max-w-md mx-auto">
           Live scores, fraud detection on players, collapse probability calculators,
-          and a curated shame gallery — all backed by actual statistics.
+          and a curated shame gallery - all backed by actual statistics.
         </p>
 
         {/* CTA Button */}
@@ -70,7 +70,7 @@ export default function LandingPage() {
       {/* Dedication */}
       <div className="absolute bottom-16 text-center px-6">
         <p className="text-xs text-text-secondary italic">
-          To <span className="text-pak-green">Wasay bhai</span>, <span className="text-pak-green">Iffi bhai</span> and <span className="text-pak-green">Neem ka Ped</span> — I owe you one 🤝
+          To <span className="text-pak-green">Wasay bhai</span>, <span className="text-pak-green">Iffi bhai</span> and <span className="text-pak-green">Neem ka Ped</span> - I owe you one 🤝
         </p>
       </div>
 

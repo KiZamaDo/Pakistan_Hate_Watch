@@ -1,12 +1,12 @@
 """
-Pakistan Cricket Defeats & Tournament Record — Since 2022
+Pakistan Cricket Defeats & Tournament Record - Since 2022
 ==========================================================
 Categories:
   humiliating  → Lost by massive margin (innings defeat, 100+ runs, 8+ wickets)
   embarrassing → Lost to a minnow/associate/lower-ranked team
   expected     → Lost to a higher-ranked team in a competitive match
 
-No "painful" — that's subjective gibberish. These three cover everything.
+No "painful" - that's subjective gibberish. These three cover everything.
 """
 
 # All defeats since Jan 2022
@@ -40,7 +40,7 @@ RECENT_DEFEATS = [
     # 2022
     {"id": "d19", "date": "2022-11-13", "opponent": "England", "format": "T20I", "venue": "Melbourne", "pak_score": "137/8", "opp_score": "138/5", "margin": "5 wickets", "category": "expected", "tournament": "T20 World Cup 2022 Final", "description": "Lost the T20 World Cup Final to England at MCG. Stokes finished it.", "misery": 8},
     {"id": "d20", "date": "2022-10-23", "opponent": "Zimbabwe", "format": "T20I", "venue": "Perth", "pak_score": "129/8", "opp_score": "130/8", "margin": "1 run", "category": "embarrassing", "tournament": "T20 World Cup 2022", "description": "LOST TO ZIMBABWE by 1 run at the T20 World Cup. At Perth. In a must-win.", "misery": 10},
-    {"id": "d21", "date": "2022-12-09", "opponent": "England", "format": "Test", "venue": "Rawalpindi", "pak_score": "579 & 268", "opp_score": "657 & 170/0", "margin": "innings and ... oh wait no — they chased 343", "category": "humiliating", "tournament": None, "description": "England chased 343 on the final day at Rawalpindi. Bazball's first victim at home.", "misery": 9},
+    {"id": "d21", "date": "2022-12-09", "opponent": "England", "format": "Test", "venue": "Rawalpindi", "pak_score": "579 & 268", "opp_score": "657 & 170/0", "margin": "innings and ... oh wait no - they chased 343", "category": "humiliating", "tournament": None, "description": "England chased 343 on the final day at Rawalpindi. Bazball's first victim at home.", "misery": 9},
     {"id": "d22", "date": "2022-12-17", "opponent": "England", "format": "Test", "venue": "Multan", "pak_score": "202 & 328", "opp_score": "281 & 275/6", "margin": "4 wickets", "category": "expected", "tournament": None, "description": "England won 3-0 in Pakistan. First time ever.", "misery": 8},
 ]
 
@@ -49,7 +49,7 @@ TOURNAMENT_RECORD = [
     {"tournament": "T20 World Cup 2022", "result": "Final (Lost to England)", "stage": "Final", "won": False, "embarrassment": 7},
     {"tournament": "ODI World Cup 2023", "result": "League Stage (5th, missed SF)", "stage": "League", "won": False, "embarrassment": 8},
     {"tournament": "T20 World Cup 2024", "result": "Group Stage Exit", "stage": "Group", "won": False, "embarrassment": 10},
-    {"tournament": "Champions Trophy 2025", "result": "Host — knocked out", "stage": "Semi/Final area", "won": False, "embarrassment": 9},
+    {"tournament": "Champions Trophy 2025", "result": "Host - knocked out", "stage": "Semi/Final area", "won": False, "embarrassment": 9},
     {"tournament": "T20 World Cup 2026", "result": "Super 8 Exit", "stage": "Super 8", "won": False, "embarrassment": 8},
 ]
 

@@ -4,12 +4,12 @@ CricAPI Integration Service
 Fetches real match data from api.cricapi.com (CricketData.org).
 
 Free tier endpoints (100 requests/day):
-  GET /v1/matches          — all matches with inline scores
-  GET /v1/currentMatches   — live/current matches with inline scores
-  GET /v1/match_info       — single match detail (scores, toss, winner, squads)
+  GET /v1/matches          - all matches with inline scores
+  GET /v1/currentMatches   - live/current matches with inline scores
+  GET /v1/match_info       - single match detail (scores, toss, winner, squads)
 
 Paid-only (not used):
-  GET /v1/match_scorecard  — full batting/bowling card (requires paid plan)
+  GET /v1/match_scorecard  - full batting/bowling card (requires paid plan)
 
 Response format from CricAPI:
 {
@@ -114,7 +114,7 @@ def _normalize_match(match: dict) -> dict:
     team1 = teams[0] if len(teams) > 0 else "TBD"
     team2 = teams[1] if len(teams) > 1 else "TBD"
 
-    # teamInfo may not be in same order as teams — map by name
+    # teamInfo may not be in same order as teams - map by name
     team1_img = ""
     team2_img = ""
     for ti in team_info:

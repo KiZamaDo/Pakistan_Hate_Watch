@@ -1,5 +1,5 @@
 """
-Pakistan T20I Squad — Fraud Watch Profiles
+Pakistan T20I Squad - Fraud Watch Profiles
 ==========================================
 Current squad based on T20 World Cup 2026 selections.
 T20I-only stats. Focus on:
@@ -66,7 +66,7 @@ PLAYER_PROFILES = [
             "The pitch was two-paced",
             "He was batting for the team situation",
             "You can't judge a player by ICC events alone",
-            "His record speaks for itself (it does — poorly in knockouts)",
+            "His record speaks for itself (it does - poorly in knockouts)",
         ],
         "verdict_summary": "4000+ T20I runs mean nothing when your WC powerplay SR is 86 and ICC knockout average is 13.7. The definition of a bilateral bully. Looks beautiful scoring 80*(55) against Zimbabwe. Invisible when India bowls.",
     },
@@ -104,7 +104,7 @@ PLAYER_PROFILES = [
         },
         "red_flags": [
             {"flag": "Feast or Famine", "severity": "minor", "evidence": "10 ducks in 120 matches but also match-winning knocks. At least when he fails, he fails fast and doesn't waste balls."},
-            {"flag": "Average Only 24", "severity": "minor", "evidence": "Low average but high SR means he's playing the right role — aggressive opener who either fires or gets out trying."},
+            {"flag": "Average Only 24", "severity": "minor", "evidence": "Low average but high SR means he's playing the right role - aggressive opener who either fires or gets out trying."},
         ],
         "performance_trend": [
             {"period": "2023 H1", "average": 28.5, "strike_rate": 138.2, "matches": 10},
@@ -116,7 +116,7 @@ PLAYER_PROFILES = [
             {"period": "2026 H1", "average": 26.5, "strike_rate": 136.5, "matches": 8},
         ],
         "excuse_generator": [
-            "He scores at 132+ SR — that's what T20 openers should do",
+            "He scores at 132+ SR - that's what T20 openers should do",
             "Champions Trophy 2017 final",
             "He doesn't waste balls like Babar",
             "At least he tries to win games",
@@ -177,7 +177,7 @@ PLAYER_PROFILES = [
             "He just needs a good partner at the other end",
             "Wait he's not even in the squad anymore",
         ],
-        "verdict_summary": "DROPPED from the T20 WC 2026 squad because even Pakistan couldn't stomach a 117 SR anymore. The king of bilateral stat-padding — averages 52 vs associates, 30 vs real teams. Consumed 40-ball powerplay slots scoring at 98 SR in World Cups while the required rate climbed to Everest. The retirement is overdue.",
+        "verdict_summary": "DROPPED from the T20 WC 2026 squad because even Pakistan couldn't stomach a 117 SR anymore. The king of bilateral stat-padding - averages 52 vs associates, 30 vs real teams. Consumed 40-ball powerplay slots scoring at 98 SR in World Cups while the required rate climbed to Everest. The retirement is overdue.",
     },
     {
         "id": "p4",
@@ -212,7 +212,7 @@ PLAYER_PROFILES = [
             "icc_knockout_avg": 48.3,
         },
         "red_flags": [
-            {"flag": "Small Sample Size", "severity": "minor", "evidence": "Only 25 T20Is — could be a purple patch. But the signs are very promising."},
+            {"flag": "Small Sample Size", "severity": "minor", "evidence": "Only 25 T20Is - could be a purple patch. But the signs are very promising."},
         ],
         "performance_trend": [
             {"period": "2025 H1", "average": 32.5, "strike_rate": 148.2, "matches": 8},
@@ -220,11 +220,11 @@ PLAYER_PROFILES = [
             {"period": "2026 H1", "average": 76.6, "strike_rate": 160.3, "matches": 7},
         ],
         "excuse_generator": [
-            "No excuses needed — he's actually delivering",
+            "No excuses needed - he's actually delivering",
             "383 runs at 160 SR in a World Cup speaks for itself",
             "This is what a modern T20 player looks like",
         ],
-        "verdict_summary": "The anti-fraud. 383 runs at SR 160.25 in the T20 WC 2026 with 2 centuries. Plays the same way against everyone — SR 155 vs Test nations, 165 vs associates. No bilateral merchant here. Pakistan's future if they don't ruin him.",
+        "verdict_summary": "The anti-fraud. 383 runs at SR 160.25 in the T20 WC 2026 with 2 centuries. Plays the same way against everyone - SR 155 vs Test nations, 165 vs associates. No bilateral merchant here. Pakistan's future if they don't ruin him.",
     },
     {
         "id": "p5",
@@ -259,7 +259,7 @@ PLAYER_PROFILES = [
             "icc_knockout_avg": 0,
         },
         "red_flags": [
-            {"flag": "SR 118.5 — Test Batsman in T20s", "severity": "major", "evidence": "Not built for T20s. Good Test player playing the wrong format."},
+            {"flag": "SR 118.5 - Test Batsman in T20s", "severity": "major", "evidence": "Not built for T20s. Good Test player playing the wrong format."},
             {"flag": "Zero MOM vs Test Nations", "severity": "major", "evidence": "18 matches, not a single match-winning performance against a real team."},
             {"flag": "SR Drops to 110 vs Test Nations", "severity": "major", "evidence": "Barely rotates strike against quality bowling. Becomes a passenger."},
         ],
@@ -305,7 +305,7 @@ PLAYER_PROFILES = [
             "death_overs_economy": 9.2,
         },
         "red_flags": [
-            {"flag": "Economy 7.8 — Expensive", "severity": "major", "evidence": "T20I economy of 7.8 is above average. Gets hit when not swinging."},
+            {"flag": "Economy 7.8 - Expensive", "severity": "major", "evidence": "T20I economy of 7.8 is above average. Gets hit when not swinging."},
             {"flag": "Death Overs Economy 9.2", "severity": "major", "evidence": "Leaks at death when hitters target his lack of variations."},
             {"flag": "Fitness Breakdowns", "severity": "major", "evidence": "Misses series regularly. Can't stay fit for consecutive tournaments."},
         ],
@@ -318,11 +318,11 @@ PLAYER_PROFILES = [
         ],
         "excuse_generator": [
             "He's only 23, he'll get better",
-            "The pace is genuine — 150kph",
+            "The pace is genuine - 150kph",
             "He swings both ways (hence the nickname)",
             "He's managing his workload",
         ],
-        "verdict_summary": "Raw pace talent but the economy of 7.8 and death bowling at 9.2 means he's a net negative in the death. 'Dono taraf hilata hai' — swings both ways, including the match result. Injury-prone and expensive when not getting early wickets.",
+        "verdict_summary": "Raw pace talent but the economy of 7.8 and death bowling at 9.2 means he's a net negative in the death. 'Dono taraf hilata hai' - swings both ways, including the match result. Injury-prone and expensive when not getting early wickets.",
     },
     {
         "id": "p7",
@@ -354,7 +354,7 @@ PLAYER_PROFILES = [
             "death_overs_economy": 10.8,
         },
         "red_flags": [
-            {"flag": "Death Overs Economy 10.8", "severity": "critical", "evidence": "Gets absolutely carted in death overs. The Wade trauma never healed — 3 sixes in the 2021 WC semi."},
+            {"flag": "Death Overs Economy 10.8", "severity": "critical", "evidence": "Gets absolutely carted in death overs. The Wade trauma never healed - 3 sixes in the 2021 WC semi."},
             {"flag": "Fitness Concerns", "severity": "major", "evidence": "Breaks down mid-series regularly. Pakistan's pace attack planning revolves around his availability."},
             {"flag": "Expensive When Not Taking Early Wickets", "severity": "major", "evidence": "Powerplay specialist who becomes a liability if he doesn't strike in the first 3 overs."},
         ],
@@ -371,9 +371,9 @@ PLAYER_PROFILES = [
             "He's the best left-arm quick in the world",
             "That one over to Wade doesn't define him",
             "He'll come good in the next tournament",
-            "Shaheen Sofa — only performs when rested on the sofa",
+            "Shaheen Sofa - only performs when rested on the sofa",
         ],
-        "verdict_summary": "World-class in the powerplay, absolute liability at the death. Economy of 10.8 in death overs is criminal. The Wade PTSD (3 sixes in 2021 WC semi) haunts every high-pressure situation. 'Shaheen Sofa' — best performance comes after sitting out for months.",
+        "verdict_summary": "World-class in the powerplay, absolute liability at the death. Economy of 10.8 in death overs is criminal. The Wade PTSD (3 sixes in 2021 WC semi) haunts every high-pressure situation. 'Shaheen Sofa' - best performance comes after sitting out for months.",
     },
     {
         "id": "p8",
@@ -406,7 +406,7 @@ PLAYER_PROFILES = [
         },
         "red_flags": [
             {"flag": "DROPPED from T20 WC 2026 Squad", "severity": "critical", "evidence": "Dropped despite being a regular. Economy of 8.2 was deemed too expensive."},
-            {"flag": "Economy 8.2 — Most Expensive Pacer", "severity": "critical", "evidence": "Leaks runs consistently. High pace but no variation or intelligence."},
+            {"flag": "Economy 8.2 - Most Expensive Pacer", "severity": "critical", "evidence": "Leaks runs consistently. High pace but no variation or intelligence."},
             {"flag": "No Plan B", "severity": "major", "evidence": "Bowls fast and short. When it doesn't work, has nothing else to offer."},
         ],
         "performance_trend": [
@@ -424,7 +424,7 @@ PLAYER_PROFILES = [
             "Wait, he's been dropped?",
             "'Tepia' because his bowling gets hammered like a tepia (puncture repair)",
         ],
-        "verdict_summary": "DROPPED. Economy of 8.2 with no variations = franchise league bully who can't deliver at international level against real batsmen. 'Haris Tepia' — patches things up temporarily but the tire always goes flat again.",
+        "verdict_summary": "DROPPED. Economy of 8.2 with no variations = franchise league bully who can't deliver at international level against real batsmen. 'Haris Tepia' - patches things up temporarily but the tire always goes flat again.",
     },
     {
         "id": "p9",
@@ -459,7 +459,7 @@ PLAYER_PROFILES = [
             "icc_knockout_avg": 17.3,
         },
         "red_flags": [
-            {"flag": "Injury-Prone Young Career", "severity": "major", "evidence": "Already had a significant injury setback early in career. 'Puncture Tube' — deflates at the wrong time."},
+            {"flag": "Injury-Prone Young Career", "severity": "major", "evidence": "Already had a significant injury setback early in career. 'Puncture Tube' - deflates at the wrong time."},
             {"flag": "ICC Knockout Average 17.3", "severity": "minor", "evidence": "Small sample but the big-game failures are already showing."},
         ],
         "performance_trend": [
@@ -471,9 +471,9 @@ PLAYER_PROFILES = [
             "He's only 20, give him time",
             "The talent is undeniable",
             "He'll be Pakistan's future No. 1",
-            "'Puncture Tube' — just needs a bit of patching up",
+            "'Puncture Tube' - just needs a bit of patching up",
         ],
-        "verdict_summary": "Genuine talent with the right intent — SR 142+ is exactly what Pakistan needs. But 'Puncture Tube' keeps deflating at crucial moments. Young enough to improve but the early injury history is concerning.",
+        "verdict_summary": "Genuine talent with the right intent - SR 142+ is exactly what Pakistan needs. But 'Puncture Tube' keeps deflating at crucial moments. Young enough to improve but the early injury history is concerning.",
     },
     {
         "id": "p10",
@@ -505,7 +505,7 @@ PLAYER_PROFILES = [
             "death_overs_economy": 8.5,
         },
         "red_flags": [
-            {"flag": "Inconsistent Lengths", "severity": "major", "evidence": "Started brilliantly in Tests but T20I lengths are all over the place. 'Mistri' — works like a plumber, sometimes it flows, sometimes it leaks."},
+            {"flag": "Inconsistent Lengths", "severity": "major", "evidence": "Started brilliantly in Tests but T20I lengths are all over the place. 'Mistri' - works like a plumber, sometimes it flows, sometimes it leaks."},
             {"flag": "Avg Rises to 30.5 vs Test Nations", "severity": "major", "evidence": "Picks up cheapies against minnows but real batsmen read him."},
         ],
         "performance_trend": [
@@ -519,7 +519,7 @@ PLAYER_PROFILES = [
             "He just needs more games",
             "'Mistri' because he fixes things... occasionally",
         ],
-        "verdict_summary": "'Abrar Mistri' — the plumber who sometimes fixes the leak and sometimes floods the house. Test debut was sensational but T20I bowling average of 30.5 vs Test nations shows real batsmen have figured him out.",
+        "verdict_summary": "'Abrar Mistri' - the plumber who sometimes fixes the leak and sometimes floods the house. Test debut was sensational but T20I bowling average of 30.5 vs Test nations shows real batsmen have figured him out.",
     },
     {
         "id": "p11",
@@ -558,7 +558,7 @@ PLAYER_PROFILES = [
         },
         "red_flags": [
             {"flag": "Neither Bat Nor Bowl Convincingly", "severity": "major", "evidence": "Batting average 24, bowling average 32.5. Not good enough at either to justify a spot on one skill alone."},
-            {"flag": "Captain by Default", "severity": "minor", "evidence": "Made captain for T20 WC 2026 largely because everyone else was worse or unavailable. 'Agha Ji' — respected but not feared."},
+            {"flag": "Captain by Default", "severity": "minor", "evidence": "Made captain for T20 WC 2026 largely because everyone else was worse or unavailable. 'Agha Ji' - respected but not feared."},
         ],
         "performance_trend": [
             {"period": "2024 H2", "average": 25.5, "strike_rate": 132.1, "matches": 8},
@@ -570,9 +570,9 @@ PLAYER_PROFILES = [
             "He provides balance",
             "His captaincy is improving",
             "He can bat AND bowl AND field",
-            "'Agha Ji' — everyone respects him, nobody fears him",
+            "'Agha Ji' - everyone respects him, nobody fears him",
         ],
-        "verdict_summary": "'Agha Ji' — the captain by elimination. Provides balance on paper but neither batting (avg 24) nor bowling (avg 32.5) is international-quality in isolation. The most 'bits and pieces' captain Pakistan have ever had.",
+        "verdict_summary": "'Agha Ji' - the captain by elimination. Provides balance on paper but neither batting (avg 24) nor bowling (avg 32.5) is international-quality in isolation. The most 'bits and pieces' captain Pakistan have ever had.",
     },
     {
         "id": "p12",
@@ -611,7 +611,7 @@ PLAYER_PROFILES = [
         },
         "red_flags": [
             {"flag": "ICC Knockout Average: 3.0", "severity": "critical", "evidence": "12 runs in 4 ICC knockout innings. THREE POINT ZERO average. 'Wide Ball' extends to his batting too."},
-            {"flag": "Wides at Crucial Moments", "severity": "critical", "evidence": "Bowled a no-ball + wide in the last over vs India at T20 WC 2022 at MCG. Ashwin left the wide to level scores, then hit the winning runs. That over had everything — wicket, no-ball, wide, bowled on free hit, and India won."},
+            {"flag": "Wides at Crucial Moments", "severity": "critical", "evidence": "Bowled a no-ball + wide in the last over vs India at T20 WC 2022 at MCG. Ashwin left the wide to level scores, then hit the winning runs. That over had everything - wicket, no-ball, wide, bowled on free hit, and India won."},
             {"flag": "Batting SR 108 vs Test Nations", "severity": "major", "evidence": "Cannot bat against real bowling. Only useful against minnows."},
         ],
         "performance_trend": [
@@ -627,8 +627,8 @@ PLAYER_PROFILES = [
             "He provides left-arm spin option",
             "He can bat at 7 or 8",
             "That wide in the WC final could happen to anyone",
-            "'Wide Ball' — his signature delivery",
+            "'Wide Ball' - his signature delivery",
         ],
-        "verdict_summary": "'Wide Ball' Nawaz — ICC knockout batting average of 3.0. THREE. Bowled a no-ball AND a wide in the last over vs India at T20 WC 2022, handing them the win. That single over contained a wicket, no-ball, free hit, wide, bowled, and a run out attempt. A bits-and-pieces player whose bits keep falling off in big games.",
+        "verdict_summary": "'Wide Ball' Nawaz - ICC knockout batting average of 3.0. THREE. Bowled a no-ball AND a wide in the last over vs India at T20 WC 2022, handing them the win. That single over contained a wicket, no-ball, free hit, wide, bowled, and a run out attempt. A bits-and-pieces player whose bits keep falling off in big games.",
     },
 ]

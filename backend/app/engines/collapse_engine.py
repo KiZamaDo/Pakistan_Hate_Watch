@@ -15,7 +15,7 @@ Alert Levels:
   MELTDOWN         → 5+ wickets lost rapidly, game effectively over
   COLLAPSE_INCOMING → 3-4 quick wickets, pattern matches historical collapses
   CHOKING          → Scoring rate cratering under pressure
-  NERVOUS          → Early warning signs — a wicket cluster starting
+  NERVOUS          → Early warning signs - a wicket cluster starting
   STABLE           → No collapse indicators (rare for Pakistan)
 """
 
@@ -38,9 +38,9 @@ COLLAPSE_PATTERNS = [
         "frequency": "Occurs in ~22% of Pakistan ODI innings",
         "last_occurrence": "2025-03-04 vs New Zealand (174 all out)",
         "famous_examples": [
-            "vs India, WC 2023 — 191 all out",
-            "vs New Zealand, 2025 — 174 all out",
-            "vs Australia, Perth 2024 — 203 all out",
+            "vs India, WC 2023 - 191 all out",
+            "vs New Zealand, 2025 - 174 all out",
+            "vs Australia, Perth 2024 - 203 all out",
         ],
     },
     {
@@ -54,14 +54,14 @@ COLLAPSE_PATTERNS = [
         "frequency": "Occurs in ~15% of Pakistan ODI innings",
         "last_occurrence": "2023-10-14 vs Afghanistan WC (282/7, nearly all out)",
         "famous_examples": [
-            "vs India, 2023 WC — From decent start to 191 all out",
-            "vs England, Rawalpindi 2024 — Middle order vanished",
-            "vs South Africa, Centurion 2024 — 5 for 31 in middle overs",
+            "vs India, 2023 WC - From decent start to 191 all out",
+            "vs England, Rawalpindi 2024 - Middle order vanished",
+            "vs South Africa, Centurion 2024 - 5 for 31 in middle overs",
         ],
     },
     {
         "name": "The Tail-End Surrender",
-        "description": "Last 4 wickets fall for under 20 runs. The tail doesn't wag — it barely twitches.",
+        "description": "Last 4 wickets fall for under 20 runs. The tail doesn't wag - it barely twitches.",
         "trigger_conditions": [
             "7th wicket falls with still 10+ overs remaining",
             "Last 3 batsmen average under 8",
@@ -71,8 +71,8 @@ COLLAPSE_PATTERNS = [
         "last_occurrence": "2024-11-03 vs Australia, Perth (last 4 wickets for 18 runs)",
         "famous_examples": [
             "72 all out vs England, Abu Dhabi 2012",
-            "vs India, WC 2023 — tail folded in 4 overs",
-            "vs Australia, Perth 2024 — last 4 for 18",
+            "vs India, WC 2023 - tail folded in 4 overs",
+            "vs Australia, Perth 2024 - last 4 for 18",
         ],
     },
     {
@@ -102,8 +102,8 @@ COLLAPSE_PATTERNS = [
         "frequency": "Occurs in ~20% of Pakistan ODI chases",
         "last_occurrence": "2024-06-11 vs USA, T20 WC 2024",
         "famous_examples": [
-            "vs England, T20 WC 2022 Final — 137/8",
-            "vs USA, T20 WC 2024 — couldn't accelerate",
+            "vs England, T20 WC 2022 Final - 137/8",
+            "vs USA, T20 WC 2024 - couldn't accelerate",
             "Various bilateral chases where Rizwan anchored too hard",
         ],
     },
@@ -139,7 +139,7 @@ def detect_collapse(
         if len(last_5_over_wickets) >= 3:
             alerts.append({
                 "type": "WICKET_CLUSTER",
-                "message": f"🚨 {len(last_5_over_wickets)} wickets in last 5 overs — collapse in progress!",
+                "message": f"🚨 {len(last_5_over_wickets)} wickets in last 5 overs - collapse in progress!",
                 "severity": "critical",
             })
             panic_level += 35
@@ -153,7 +153,7 @@ def detect_collapse(
         if match_format == "ODI" and recent_avg_rr < 3.0 and overall_rr > 4.5:
             alerts.append({
                 "type": "SCORING_FREEZE",
-                "message": f"❄️ Run rate crashed from {overall_rr:.1f} to {recent_avg_rr:.1f} — pressure paralysis",
+                "message": f"❄️ Run rate crashed from {overall_rr:.1f} to {recent_avg_rr:.1f} - pressure paralysis",
                 "severity": "major",
             })
             panic_level += 25
@@ -162,7 +162,7 @@ def detect_collapse(
         elif match_format == "T20I" and recent_avg_rr < 5.0 and overall_rr > 7.0:
             alerts.append({
                 "type": "SCORING_FREEZE",
-                "message": f"❄️ T20 run rate dropped to {recent_avg_rr:.1f} — this is NOT how T20 works",
+                "message": f"❄️ T20 run rate dropped to {recent_avg_rr:.1f} - this is NOT how T20 works",
                 "severity": "major",
             })
             panic_level += 30
@@ -172,7 +172,7 @@ def detect_collapse(
     if wickets >= 3 and overs < total_overs * 0.25:
         alerts.append({
             "type": "TOP_ORDER_COLLAPSE",
-            "message": f"💀 {wickets} wickets down in first {overs:.1f} overs — textbook Pakistan",
+            "message": f"💀 {wickets} wickets down in first {overs:.1f} overs - textbook Pakistan",
             "severity": "critical",
         })
         panic_level += 30
@@ -188,7 +188,7 @@ def detect_collapse(
             if req_rr > 10 and wickets >= 4:
                 alerts.append({
                     "type": "CHASE_IMPOSSIBLE",
-                    "message": f"☠️ Need {runs_needed} off {overs_left:.1f} overs with {10-wickets} wickets — it's over",
+                    "message": f"☠️ Need {runs_needed} off {overs_left:.1f} overs with {10-wickets} wickets - it's over",
                     "severity": "critical",
                 })
                 panic_level += 40
@@ -196,7 +196,7 @@ def detect_collapse(
             elif req_rr > 8 and wickets >= 3:
                 alerts.append({
                     "type": "CHASE_SLIPPING",
-                    "message": f"⚠️ Required rate climbing to {req_rr:.1f} — classic Pakistan chase implosion building",
+                    "message": f"⚠️ Required rate climbing to {req_rr:.1f} - classic Pakistan chase implosion building",
                     "severity": "major",
                 })
                 panic_level += 20
@@ -206,7 +206,7 @@ def detect_collapse(
     if wickets >= 7:
         alerts.append({
             "type": "TAIL_EXPOSED",
-            "message": f"🦆 Tail exposed at {runs}/{wickets} — Pakistan's tail has a collective average of 8",
+            "message": f"🦆 Tail exposed at {runs}/{wickets} - Pakistan's tail has a collective average of 8",
             "severity": "critical",
         })
         panic_level += 25
@@ -258,7 +258,7 @@ def _project_collapse_outcome(
 
     # Pakistan's average runs per remaining wicket when collapsing
     if panic_level >= 50:
-        runs_per_wicket = 8.5   # Deep trouble — tail folds quickly
+        runs_per_wicket = 8.5   # Deep trouble - tail folds quickly
     elif panic_level >= 30:
         runs_per_wicket = 14.2  # Moderate trouble
     else:

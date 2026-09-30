@@ -1,5 +1,5 @@
 /**
- * API Client — connects to the Python FastAPI backend
+ * API Client - connects to the Python FastAPI backend
  */
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";

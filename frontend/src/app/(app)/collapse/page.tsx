@@ -117,7 +117,7 @@ export default function CollapsePage() {
       <section>
         <h2 className="text-base font-bold mb-4 flex items-center gap-2">
           <Zap className="h-5 w-5 text-pak-green" />
-          Collapse Simulator — Pick a Scenario
+          Collapse Simulator - Pick a Scenario
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {presetScenarios.map((s, i) => (
@@ -259,7 +259,7 @@ export default function CollapsePage() {
       <section>
         <h2 className="text-base font-bold mb-4 flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-pak-green" />
-          Know Your Collapses — Pakistan&apos;s Greatest Hits
+          Know Your Collapses - Pakistan&apos;s Greatest Hits
         </h2>
         <div className="space-y-3">
           {patternList.map((p: any, i: number) => (

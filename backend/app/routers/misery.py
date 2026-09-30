@@ -1,5 +1,5 @@
 """
-Misery Dashboard Router — Since 2022 only
+Misery Dashboard Router - Since 2022 only
 ==========================================
 Proper categories, real tournament record, home series, h2h.
 """
@@ -85,19 +85,19 @@ def get_misery_stats():
         "worst_defeat": worst,
 
         "lowlights": [
-            {"event": "Lost to USA in Super Over — T20 WC 2024", "misery": 10, "category": "embarrassing"},
-            {"event": "Lost to Zimbabwe by 1 run — T20 WC 2022", "misery": 10, "category": "embarrassing"},
-            {"event": "114 all out vs India — T20 WC 2026", "misery": 9, "category": "humiliating"},
-            {"event": "Lost by an innings at Old Trafford — 2026", "misery": 9, "category": "humiliating"},
+            {"event": "Lost to USA in Super Over - T20 WC 2024", "misery": 10, "category": "embarrassing"},
+            {"event": "Lost to Zimbabwe by 1 run - T20 WC 2022", "misery": 10, "category": "embarrassing"},
+            {"event": "114 all out vs India - T20 WC 2026", "misery": 9, "category": "humiliating"},
+            {"event": "Lost by an innings at Old Trafford - 2026", "misery": 9, "category": "humiliating"},
             {"event": "Lost to Afghanistan at ODI WC 2023", "misery": 9, "category": "embarrassing"},
-            {"event": "Group stage exit — T20 WC 2024", "misery": 10, "category": "embarrassing"},
+            {"event": "Group stage exit - T20 WC 2024", "misery": 10, "category": "embarrassing"},
         ],
 
         "fun_facts": [
             "Pakistan have been eliminated from a World Cup by USA 🇺🇸",
             "0 ICC trophies since 2022 across 5 tournaments",
             f"Win rate of {round(total_won / max(total_won + total_lost, 1) * 100)}% since 2022",
-            "Lost a home Test series 0-3 to England in 2022 — first time ever",
+            "Lost a home Test series 0-3 to England in 2022 - first time ever",
             "Hosted Champions Trophy 2025 and still couldn't win it",
             f"{cat_counts.get('humiliating', 0)} defeats by massive margins since 2022",
             "Lost to Zimbabwe by 1 run at T20 WC 2022. ONE. RUN.",

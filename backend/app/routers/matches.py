@@ -1,10 +1,10 @@
 """
-Matches Router — Real-time match data from CricAPI
+Matches Router - Real-time match data from CricAPI
 ===================================================
 Endpoints:
-  GET /live         — current/live Pakistan matches
-  GET /all          — all Pakistan matches (filterable by status)
-  GET /{id}/detail  — single match detail with scores + our analysis overlay
+  GET /live         - current/live Pakistan matches
+  GET /all          - all Pakistan matches (filterable by status)
+  GET /{id}/detail  - single match detail with scores + our analysis overlay
 """
 
 from fastapi import APIRouter, Query
