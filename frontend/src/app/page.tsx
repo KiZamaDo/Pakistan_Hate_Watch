@@ -77,7 +77,7 @@ export default function LandingPage() {
       {/* Bottom text */}
       <div className="absolute bottom-4 text-center text-[10px] text-text-muted">
         <p>🏏 Tracking disappointment since 1952</p>
-        <p className="mt-1 opacity-60">Built with Python, Next.js, and zero respect for Babar&apos;s bilateral stats</p>
+        <p className="mt-1 opacity-60">Created, compiled and designed by <span className="text-pak-green">KiZamaDo</span> (and Claude ;)</p>
       </div>
     </div>
   );

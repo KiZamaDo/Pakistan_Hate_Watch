@@ -110,6 +110,9 @@ export function Sidebar() {
             <p className="mt-2 text-xs text-pak-green font-mono">
               🏏 Tracking since 1952
             </p>
+            <p className="mt-1 text-[9px] text-text-muted/60">
+              Created, compiled and designed by <span className="text-pak-green/80">KiZamaDo</span> (and Claude ;)
+            </p>
           </div>
         </div>
       </aside>

@@ -54,7 +54,11 @@ export default function MatchesPage() {
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"choose" | "win" | "learn">("choose");
-  const [quoteIdx] = useState(() => Math.floor(Math.random() * QUOTES.length));
+  const [quoteIdx, setQuoteIdx] = useState(0);
+
+  useEffect(() => {
+    setQuoteIdx(Math.floor(Math.random() * QUOTES.length));
+  }, []);
 
   const fetchMatches = useCallback(async () => {
     setLoading(true);
